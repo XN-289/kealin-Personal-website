@@ -1,17 +1,20 @@
 import { Link } from 'react-router-dom'
-import { Code2, Mail, Heart } from 'lucide-react'
-import { GithubIcon, TwitterIcon, LinkedinIcon } from './Icons'
+import { Terminal, Mail, Heart, ArrowUpRight } from 'lucide-react'
+import { GithubIcon, TwitterIcon, BilibiliIcon } from './Icons'
 
 const socialLinks = [
   { icon: GithubIcon, href: 'https://github.com', label: 'GitHub' },
+  { icon: BilibiliIcon, href: 'https://bilibili.com', label: 'Bilibili' },
   { icon: TwitterIcon, href: 'https://twitter.com', label: 'Twitter' },
-  { icon: LinkedinIcon, href: 'https://linkedin.com', label: 'LinkedIn' },
   { icon: Mail, href: 'mailto:your@email.com', label: 'Email' },
 ]
 
-const footerLinks = [
+const footerLinks: Array<{
+  title: string
+  links: Array<{ label: string; path: string } | { label: string; href: string }>
+}> = [
   {
-    title: '导航',
+    title: 'NAVIGATE',
     links: [
       { label: '首页', path: '/' },
       { label: '关于我', path: '/about' },
@@ -20,35 +23,38 @@ const footerLinks = [
     ],
   },
   {
-    title: '社交媒体',
+    title: 'CONNECT',
     links: [
       { label: 'GitHub', href: 'https://github.com' },
       { label: '哔哩哔哩', href: 'https://bilibili.com' },
       { label: '抖音', href: 'https://douyin.com' },
-      { label: 'Twitter', href: 'https://twitter.com' },
+      { label: '联系我', path: '/contact' },
     ],
   },
 ]
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#0a0e1a] border-t border-white/5">
-      {/* 背景装饰 */}
-      <div className="absolute inset-0 bg-grid opacity-50" />
+    <footer className="relative border-t border-cyan-500/10">
+      {/* 背景网格 */}
+      <div className="absolute inset-0 bg-grid-cyan opacity-30" />
 
-      <div className="relative container-custom py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
-          {/* 品牌区域 */}
+      <div className="relative container-custom py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* 品牌 */}
           <div className="md:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-                <Code2 className="w-5 h-5 text-white" />
+            <Link to="/" className="flex items-center gap-3 mb-6 group">
+              <div className="w-9 h-9 border border-cyan-400/40 flex items-center justify-center rotate-45 group-hover:border-cyan-400/80 transition-colors">
+                <Terminal className="w-4 h-4 text-cyan-400 -rotate-45" />
               </div>
-              <span className="text-xl font-bold gradient-text">TechBlog</span>
+              <div className="flex flex-col">
+                <span className="text-sm font-bold tracking-widest text-cyan-300">DIGITAL</span>
+                <span className="text-[10px] tracking-[0.3em] text-cyan-500/60">ARCHITECT</span>
+              </div>
             </Link>
-            <p className="text-gray-400 mb-6 max-w-md">
-              热爱技术的极客，专注于分享编程知识、技术见解和创新项目。
-              在这里，我记录我的技术旅程和思考。
+            <p className="text-slate-400 mb-6 max-w-md text-sm leading-relaxed">
+              热爱技术的极客，专注于用代码解构世界、用技术构建未来。
+              在这里，我记录我的探索旅程和思考。
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => {
@@ -59,38 +65,40 @@ export default function Footer() {
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 hover:border-blue-500/30 transition-all"
+                    className="w-10 h-10 border border-cyan-500/20 flex items-center justify-center text-slate-500 hover:text-cyan-400 hover:border-cyan-400/40 hover:bg-cyan-500/5 transition-all"
                     aria-label={social.label}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-4 h-4" />
                   </a>
                 )
               })}
             </div>
           </div>
 
-          {/* 链接区域 */}
+          {/* 链接 */}
           {footerLinks.map((section) => (
             <div key={section.title}>
-              <h3 className="text-white font-semibold mb-4">{section.title}</h3>
+              <h3 className="text-[10px] tracking-[0.2em] text-cyan-400/60 font-mono mb-4">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     {'path' in link ? (
                       <Link
                         to={link.path}
-                        className="text-gray-400 hover:text-blue-400 transition-colors"
+                        className="text-sm text-slate-500 hover:text-cyan-400 transition-colors flex items-center gap-1 group"
                       >
                         {link.label}
+                        <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </Link>
                     ) : (
                       <a
                         href={link.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-blue-400 transition-colors"
+                        className="text-sm text-slate-500 hover:text-cyan-400 transition-colors flex items-center gap-1 group"
                       >
                         {link.label}
+                        <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </a>
                     )}
                   </li>
@@ -100,14 +108,14 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* 底部版权 */}
-        <div className="mt-12 pt-8 border-t border-white/5">
+        {/* 底部 */}
+        <div className="mt-16 pt-8 border-t border-cyan-500/10">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} TechBlog. All rights reserved.
+            <p className="text-xs text-slate-600 font-mono">
+              © {new Date().getFullYear()} DIGITAL_ARCHITECT // ALL.RIGHTS.RESERVED
             </p>
-            <p className="text-gray-500 text-sm flex items-center gap-1">
-              Made with <Heart className="w-4 h-4 text-red-500 fill-red-500" /> using React & Tailwind CSS
+            <p className="text-xs text-slate-600 flex items-center gap-1">
+              CRAFTED.WITH <Heart className="w-3 h-3 text-cyan-500 fill-cyan-500" /> USING REACT & TAILWIND
             </p>
           </div>
         </div>

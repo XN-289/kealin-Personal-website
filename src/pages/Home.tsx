@@ -1,289 +1,414 @@
-import { motion } from 'framer-motion'
-import { ArrowDown, BookOpen, Zap, Code2, Rocket, Star } from 'lucide-react'
+import { useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ArrowDown, BookOpen, Zap, Code2, Cpu, Layers, Binary, Braces } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { GithubIcon } from '../components/Icons'
-import ParticleBackground from '../components/ParticleBackground'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
-const highlights = [
+gsap.registerPlugin(ScrollTrigger)
+
+const capabilities = [
   {
     icon: Code2,
-    title: '技术探索',
-    description: '深入学习前沿技术，探索编程的无限可能',
-    color: 'from-blue-500 to-cyan-500',
+    label: '代码编织',
+    desc: '用代码构建数字世界的骨架',
+    color: 'cyan',
   },
   {
-    icon: BookOpen,
-    title: '知识分享',
-    description: '通过博客分享技术见解和学习心得',
-    color: 'from-purple-500 to-pink-500',
+    icon: Cpu,
+    label: '系统解构',
+    desc: '拆解复杂问题，找到最优解',
+    color: 'violet',
   },
   {
-    icon: Rocket,
-    title: '项目实践',
-    description: '将想法转化为实际项目，不断挑战自我',
-    color: 'from-orange-500 to-red-500',
+    icon: Layers,
+    label: '架构设计',
+    desc: '从零搭建可扩展的数字空间',
+    color: 'emerald',
   },
   {
-    icon: Star,
-    title: '持续成长',
-    description: '保持好奇心，在技术道路上不断前进',
-    color: 'from-green-500 to-emerald-500',
+    icon: Binary,
+    label: '数据流动',
+    desc: '让信息在系统中自由流转',
+    color: 'cyan',
   },
 ]
 
 const stats = [
-  { value: '50+', label: '技术文章' },
-  { value: '20+', label: '开源项目' },
-  { value: '1000+', label: '代码提交' },
-  { value: '3+', label: '年经验' },
+  { value: '50+', label: 'ARTICLES', sublabel: '技术文章' },
+  { value: '20+', label: 'PROJECTS', sublabel: '开源项目' },
+  { value: '1000+', label: 'COMMITS', sublabel: '代码提交' },
+  { value: '3+', label: 'YEARS', sublabel: '持续探索' },
 ]
 
-export default function Home() {
+function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
+  const ref = useRef<HTMLSpanElement>(null)
+
+  useEffect(() => {
+    if (!ref.current) return
+    const el = ref.current
+    el.style.width = '0'
+    const timeout = setTimeout(() => {
+      gsap.to(el, {
+        width: '100%',
+        duration: 1.5,
+        ease: 'steps(30)',
+      })
+    }, delay)
+    return () => clearTimeout(timeout)
+  }, [text, delay])
+
   return (
-    <div className="relative min-h-screen">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* 粒子背景 */}
-        <ParticleBackground />
+    <span ref={ref} className="inline-block overflow-hidden whitespace-nowrap border-r-2 border-cyan-400" style={{ width: 0 }}>
+      {text}
+    </span>
+  )
+}
 
-        {/* 装饰性光晕 */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
+export default function Home() {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  })
 
-        {/* 内容 */}
-        <div className="relative z-10 container-custom text-center">
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95])
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -50])
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // 能力卡片依次出现
+      gsap.from('.capability-card', {
+        scrollTrigger: {
+          trigger: '.capabilities-section',
+          start: 'top 80%',
+        },
+        y: 60,
+        opacity: 0,
+        stagger: 0.15,
+        duration: 0.8,
+        ease: 'power3.out',
+      })
+
+      // 统计数字
+      gsap.from('.stat-item', {
+        scrollTrigger: {
+          trigger: '.stats-section',
+          start: 'top 80%',
+        },
+        scale: 0.8,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+      })
+
+      // 文章预览
+      gsap.from('.post-card', {
+        scrollTrigger: {
+          trigger: '.posts-section',
+          start: 'top 80%',
+        },
+        x: -40,
+        opacity: 0,
+        stagger: 0.12,
+        duration: 0.7,
+        ease: 'power2.out',
+      })
+    }, containerRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <div ref={containerRef} className="relative">
+      {/* ===== HERO: 数字建筑师的入口 ===== */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center">
+        <motion.div
+          style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+          className="relative z-10 container-custom text-center"
+        >
+          {/* 状态栏 */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="inline-flex items-center gap-3 px-4 py-2 mb-8 border border-cyan-500/20 bg-cyan-500/5"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+            <span className="text-xs tracking-[0.2em] text-cyan-400/80 font-mono">SYSTEM.INITIALIZED</span>
+            <span className="text-xs text-cyan-500/40">|</span>
+            <span className="text-xs tracking-wider text-cyan-500/50 font-mono">v2.0.25</span>
+          </motion.div>
+
+          {/* 头像 - 几何框 */}
+          <motion.div
+            initial={{ scale: 0, rotate: 45 }}
+            animate={{ scale: 1, rotate: 45 }}
+            transition={{ delay: 0.5, type: 'spring', stiffness: 200, damping: 15 }}
+            className="w-28 h-28 mx-auto mb-10 relative"
+          >
+            <div className="absolute inset-0 border-2 border-cyan-400/30 rotate-0" />
+            <div className="absolute inset-2 border border-cyan-400/20" />
+            <div className="absolute inset-0 flex items-center justify-center -rotate-45">
+              <span className="text-4xl">👨‍💻</span>
+            </div>
+            {/* 角落装饰 */}
+            <div className="absolute -top-1 -left-1 w-3 h-3 border-t-2 border-l-2 border-cyan-400" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 border-t-2 border-r-2 border-cyan-400" />
+            <div className="absolute -bottom-1 -left-1 w-3 h-3 border-b-2 border-l-2 border-cyan-400" />
+            <div className="absolute -bottom-1 -right-1 w-3 h-3 border-b-2 border-r-2 border-cyan-400" />
+          </motion.div>
+
+          {/* 标题 */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ delay: 0.7, duration: 0.8 }}
           >
-            {/* 头像占位 */}
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="w-32 h-32 mx-auto mb-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 p-1"
-            >
-              <div className="w-full h-full rounded-full bg-[#0a0e1a] flex items-center justify-center">
-                <span className="text-5xl">👨‍💻</span>
-              </div>
-            </motion.div>
-
-            {/* 标题 */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
-            >
-              <span className="text-white">你好，我是</span>
-              <br />
-              <span className="gradient-text-animated text-5xl md:text-7xl lg:text-8xl">
-                技术探索者
-              </span>
-            </motion.h1>
-
-            {/* 副标题 */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto"
-            >
-              热爱技术的极客 | 终身学习者 | 开源贡献者
-            </motion.p>
-
-            {/* 打字机效果描述 */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.6 }}
-              className="text-lg text-gray-500 mb-12 max-w-xl mx-auto"
-            >
-              <p>在这里，我分享技术见解、项目经验和学习心得</p>
-              <p className="mt-2">让我们一起探索技术的无限可能 ✨</p>
-            </motion.div>
-
-            {/* CTA按钮 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Link to="/blog" className="btn-primary flex items-center justify-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                阅读博客
-              </Link>
-              <Link to="/projects" className="btn-outline flex items-center justify-center gap-2">
-                <Zap className="w-5 h-5" />
-                查看项目
-              </Link>
-            </motion.div>
-
-            {/* GitHub链接 */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="mt-8"
-            >
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors"
-              >
-                <GithubIcon className="w-5 h-5" />
-                <span>在 GitHub 上关注我</span>
-              </a>
-            </motion.div>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 tracking-tight">
+              <span className="text-white">数字</span>
+              <span className="gradient-text-cyan">建筑师</span>
+            </h1>
           </motion.div>
 
-          {/* 滚动提示 */}
+          {/* 副标题 - 终端风格 */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.6 }}
-            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="mb-8"
           >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center gap-2 text-gray-500"
-            >
-              <span className="text-sm">向下滚动</span>
-              <ArrowDown className="w-5 h-5" />
-            </motion.div>
+            <div className="inline-flex items-center gap-2 text-slate-500 font-mono text-sm">
+              <Braces className="w-4 h-4 text-cyan-500/50" />
+              <span className="text-cyan-400/60">&gt;</span>
+              <TypewriterText text="热爱技术的极客 · 用代码解构世界" delay={1500} />
+            </div>
           </motion.div>
+
+          {/* 描述 */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.5, duration: 0.6 }}
+            className="text-lg text-slate-400 max-w-xl mx-auto mb-12 leading-relaxed"
+          >
+            在这里，每一行代码都是构建数字世界的一块砖石。
+            <br />
+            我记录探索的过程，分享解构与重建的思考。
+          </motion.p>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.8, duration: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
+            <Link to="/blog" className="btn-cyber flex items-center justify-center gap-2">
+              <BookOpen className="w-4 h-4" />
+              进入代码库
+            </Link>
+            <Link to="/projects" className="btn-outline-cyber flex items-center justify-center gap-2">
+              <Zap className="w-4 h-4" />
+              查看构建物
+            </Link>
+          </motion.div>
+
+          {/* GitHub */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.2, duration: 0.6 }}
+            className="mt-10"
+          >
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-slate-600 hover:text-cyan-400 transition-colors text-sm tracking-wider"
+            >
+              <GithubIcon className="w-4 h-4" />
+              <span className="font-mono">GITHUB://PROFILE</span>
+            </a>
+          </motion.div>
+        </motion.div>
+
+        {/* 滚动提示 */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2.5, duration: 0.6 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="flex flex-col items-center gap-2"
+          >
+            <span className="text-[10px] tracking-[0.3em] text-cyan-500/40 uppercase">Scroll to explore</span>
+            <ArrowDown className="w-4 h-4 text-cyan-500/40" />
+          </motion.div>
+        </motion.div>
+
+        {/* 装饰性坐标 */}
+        <div className="absolute bottom-8 left-8 text-[10px] font-mono text-cyan-500/20 hidden lg:block">
+          <div>X: 0.000</div>
+          <div>Y: 0.000</div>
+          <div>Z: 0.000</div>
+        </div>
+        <div className="absolute top-24 right-8 text-[10px] font-mono text-cyan-500/20 hidden lg:block text-right">
+          <div>LAT: 00.000</div>
+          <div>LNG: 00.000</div>
         </div>
       </section>
 
-      {/* Highlights Section */}
-      <section className="relative py-24 md:py-32">
+      {/* ===== CAPABILITIES: 能力矩阵 ===== */}
+      <section className="capabilities-section relative py-24 md:py-32">
         <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              我的<span className="gradient-text">技术旅程</span>
-            </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              探索、学习、创造 - 这是我对技术的热爱
-            </p>
-          </motion.div>
+          {/* 区域标题 */}
+          <div className="flex items-center gap-4 mb-16">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/20" />
+            <h2 className="text-xs tracking-[0.3em] text-cyan-400/60 font-mono uppercase">Capabilities</h2>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/20" />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {highlights.map((item, index) => {
-              const Icon = item.icon
+            {capabilities.map((cap) => {
+              const Icon = cap.icon
+              const colorMap = {
+                cyan: { border: 'border-cyan-500/20', bg: 'bg-cyan-500/10', text: 'text-cyan-400', glow: 'shadow-cyan-500/10' },
+                violet: { border: 'border-violet-500/20', bg: 'bg-violet-500/10', text: 'text-violet-400', glow: 'shadow-violet-500/10' },
+                emerald: { border: 'border-emerald-500/20', bg: 'bg-emerald-500/10', text: 'text-emerald-400', glow: 'shadow-emerald-500/10' },
+              }
+              const colors = colorMap[cap.color as keyof typeof colorMap] || colorMap.cyan
+
               return (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
-                  className="card group"
+                <div
+                  key={cap.label}
+                  className="capability-card card-cyber group"
                 >
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${item.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className="w-7 h-7 text-white" />
+                  <div className={`w-12 h-12 ${colors.border} border flex items-center justify-center mb-5 ${colors.bg} group-hover:shadow-lg ${colors.glow} transition-all`}>
+                    <Icon className={`w-5 h-5 ${colors.text}`} />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
-                  <p className="text-gray-400">{item.description}</p>
-                </motion.div>
+                  <h3 className="text-lg font-semibold text-white mb-2 tracking-wide">{cap.label}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed">{cap.desc}</p>
+                </div>
               )
             })}
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="relative py-24 md:py-32 bg-gradient-to-b from-transparent via-blue-500/5 to-transparent">
+      {/* ===== STATS: 数据面板 ===== */}
+      <section className="stats-section relative py-20">
         <div className="container-custom">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                className="text-center"
-              >
-                <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">
-                  {stat.value}
+          <div className="glass border border-cyan-500/10 p-8 md:p-12"
+            style={{ clipPath: 'polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px))' }}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat) => (
+                <div key={stat.label} className="stat-item text-center">
+                  <div className="text-3xl md:text-4xl font-bold gradient-text-cyan mb-1 font-mono">
+                    {stat.value}
+                  </div>
+                  <div className="text-[10px] tracking-[0.2em] text-cyan-400/60 font-mono mb-1">{stat.label}</div>
+                  <div className="text-xs text-slate-500">{stat.sublabel}</div>
                 </div>
-                <div className="text-gray-400 text-lg">{stat.label}</div>
-              </motion.div>
+              ))}
+            </div>
+
+            {/* 装饰性进度条 */}
+            <div className="mt-8 pt-6 border-t border-cyan-500/10">
+              <div className="flex items-center justify-between text-[10px] font-mono text-cyan-500/40 mb-2">
+                <span>SYSTEM.LOAD</span>
+                <span>87%</span>
+              </div>
+              <div className="h-1 bg-cyan-500/10 rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: '87%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.5, ease: 'easeOut', delay: 0.3 }}
+                  className="h-full bg-gradient-to-r from-cyan-500 to-violet-500 rounded-full"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== LATEST POSTS: 数据流 ===== */}
+      <section className="posts-section relative py-24 md:py-32">
+        <div className="container-custom">
+          <div className="flex items-center justify-between mb-12">
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                最新<span className="gradient-text-cyan">数据流</span>
+              </h2>
+              <p className="text-sm text-slate-500 font-mono">RECENT.TRANSMISSIONS</p>
+            </div>
+            <Link to="/blog" className="text-sm text-cyan-400/60 hover:text-cyan-400 transition-colors font-mono tracking-wider">
+              VIEW.ALL →
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { title: 'React 18 并发特性深度解析', tag: '前端', date: '2024.01.15', time: '8 min' },
+              { title: 'TypeScript 高级类型编程', tag: '语言', date: '2024.01.10', time: '12 min' },
+              { title: 'Node.js 性能优化实战', tag: '后端', date: '2024.01.05', time: '10 min' },
+            ].map((post, i) => (
+              <div key={i} className="post-card card-cyber group cursor-pointer">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="tag-cyber">{post.tag}</span>
+                  <span className="text-[10px] font-mono text-slate-600">{post.date}</span>
+                </div>
+                <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-cyan-300 transition-colors">
+                  {post.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-slate-500 font-mono">{post.time} read</span>
+                  <span className="text-xs text-cyan-400/50 group-hover:text-cyan-400 transition-colors font-mono">
+                    READ →
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Latest Posts Preview */}
-      <section className="relative py-24 md:py-32">
-        <div className="container-custom">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
-          >
+      {/* ===== CTA: 加入构建 ===== */}
+      <section className="relative py-24">
+        <div className="container-custom text-center">
+          <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              最新<span className="gradient-text">文章</span>
+              一起<span className="gradient-text-multi">构建</span>未来
             </h2>
-            <p className="text-gray-400 text-lg">
-              分享我的技术见解和学习心得
+            <p className="text-slate-400 mb-8">
+              技术是工具，代码是语言，世界是画布。
+              <br />
+              让我们一起用技术解构问题，用代码构建解决方案。
             </p>
-          </motion.div>
-
-          {/* 博客文章占位 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-                className="card group cursor-pointer"
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/contact" className="btn-cyber">
+                建立连接
+              </Link>
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline-cyber flex items-center justify-center gap-2"
               >
-                <div className="h-48 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg mb-4 flex items-center justify-center">
-                  <BookOpen className="w-12 h-12 text-blue-400" />
-                </div>
-                <div className="flex gap-2 mb-3">
-                  <span className="tag text-xs">技术</span>
-                  <span className="tag text-xs">教程</span>
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
-                  文章标题 {i}
-                </h3>
-                <p className="text-gray-400 text-sm line-clamp-2">
-                  这里是文章的简短描述，点击阅读更多...
-                </p>
-                <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
-                  <span>2024-01-{10 + i}</span>
-                  <span>5 分钟阅读</span>
-                </div>
-              </motion.div>
-            ))}
+                <GithubIcon className="w-4 h-4" />
+                源代码
+              </a>
+            </div>
           </div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <Link to="/blog" className="btn-outline">
-              查看所有文章 →
-            </Link>
-          </motion.div>
         </div>
       </section>
     </div>
