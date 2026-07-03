@@ -1,129 +1,106 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Send, MessageSquare, MapPin, Clock, CheckCircle } from 'lucide-react'
-import { GithubIcon, TwitterIcon, LinkedinIcon } from '../components/Icons'
+import { Mail, Send, MapPin, Clock, CheckCircle, MessageCircle } from 'lucide-react'
+import { GithubIcon, TwitterIcon, BilibiliIcon } from '../components/Icons'
 
-const contactMethods = [
-  { icon: Mail, label: 'EMAIL', value: 'your@email.com', href: 'mailto:your@email.com' },
-  { icon: GithubIcon, label: 'GITHUB', value: 'github.com/you', href: 'https://github.com' },
-  { icon: TwitterIcon, label: 'TWITTER', value: '@you', href: 'https://twitter.com' },
-  { icon: LinkedinIcon, label: 'LINKEDIN', value: 'linkedin.com/in/you', href: 'https://linkedin.com' },
+const channels = [
+  { icon: Mail, label: '邮箱', value: 'your@email.com', href: 'mailto:your@email.com' },
+  { icon: GithubIcon, label: 'GitHub', value: 'github.com/you', href: 'https://github.com' },
+  { icon: BilibiliIcon, label: '哔哩哔哩', value: 'bilibili.com/you', href: 'https://bilibili.com' },
+  { icon: TwitterIcon, label: 'Twitter', value: '@you', href: 'https://twitter.com' },
 ]
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsSubmitting(true)
+    setSending(true)
     await new Promise((r) => setTimeout(r, 1500))
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    setFormData({ name: '', email: '', subject: '', message: '' })
-    setTimeout(() => setIsSubmitted(false), 3000)
+    setSending(false)
+    setSent(true)
+    setForm({ name: '', email: '', message: '' })
+    setTimeout(() => setSent(false), 3000)
   }
 
   return (
     <div className="min-h-screen pt-28 pb-16">
       <div className="container-custom">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <div className="flex items-center gap-2 mb-6 text-xs font-mono">
-            <span className="text-cyan-500/40">HOME</span>
-            <span className="text-cyan-500/20">/</span>
-            <span className="text-cyan-400">CONTACT</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-            建立<span className="gradient-text-cyan">连接</span>
+          <h1 className="text-3xl md:text-4xl font-light text-white/90 mb-3">
+            <span className="gradient-text font-medium">联系</span>
           </h1>
-          <p className="text-sm font-mono text-cyan-500/40">ESTABLISH.CONNECTION // OPEN.CHANNEL</p>
+          <p className="text-stone-500">如果你有任何想法，欢迎和我聊聊</p>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Form */}
+          {/* 表单 */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
+            transition={{ delay: 0.2 }}
           >
-            <div className="glass border border-cyan-500/10 p-8"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))' }}
-            >
-              <div className="flex items-center gap-2 mb-8">
-                <MessageSquare className="w-5 h-5 text-cyan-400" />
-                <span className="text-xs tracking-[0.2em] text-cyan-400/60 font-mono">SEND.MESSAGE</span>
+            <div className="card">
+              <div className="flex items-center gap-2 mb-6">
+                <MessageCircle className="w-4 h-4 text-sky-400" />
+                <span className="text-sm text-stone-400">给我留言</span>
               </div>
 
-              {isSubmitted ? (
+              {sent ? (
                 <div className="text-center py-16">
-                  <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">传输完成</h3>
-                  <p className="text-sm text-slate-400 font-mono">MESSAGE.DELIVERED // EXPECT.REPLY.SOON</p>
+                  <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto mb-4" />
+                  <p className="text-white/90 mb-1">消息已发送</p>
+                  <p className="text-sm text-stone-500">谢谢你的留言，我会尽快回复</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-[10px] tracking-wider text-cyan-400/60 font-mono mb-2">NAME</label>
+                      <label className="block text-xs text-stone-500 mb-2">名字</label>
                       <input
-                        type="text" name="name" value={formData.name} onChange={handleChange} required
+                        type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required
                         placeholder="你的名字"
-                        className="w-full px-4 py-3 bg-[#050a14] border border-cyan-500/15 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 transition-colors font-mono"
+                        className="w-full px-4 py-3 rounded-xl bg-[#0c1222] border border-white/5 text-white placeholder-stone-600 text-sm focus:outline-none focus:border-sky-500/30 transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-[10px] tracking-wider text-cyan-400/60 font-mono mb-2">EMAIL</label>
+                      <label className="block text-xs text-stone-500 mb-2">邮箱</label>
                       <input
-                        type="email" name="email" value={formData.email} onChange={handleChange} required
+                        type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required
                         placeholder="your@email.com"
-                        className="w-full px-4 py-3 bg-[#050a14] border border-cyan-500/15 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 transition-colors font-mono"
+                        className="w-full px-4 py-3 rounded-xl bg-[#0c1222] border border-white/5 text-white placeholder-stone-600 text-sm focus:outline-none focus:border-sky-500/30 transition-colors"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[10px] tracking-wider text-cyan-400/60 font-mono mb-2">SUBJECT</label>
-                    <input
-                      type="text" name="subject" value={formData.subject} onChange={handleChange} required
-                      placeholder="消息主题"
-                      className="w-full px-4 py-3 bg-[#050a14] border border-cyan-500/15 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 transition-colors font-mono"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[10px] tracking-wider text-cyan-400/60 font-mono mb-2">MESSAGE</label>
+                    <label className="block text-xs text-stone-500 mb-2">想说的话</label>
                     <textarea
-                      name="message" value={formData.message} onChange={handleChange} required rows={5}
-                      placeholder="请输入你想说的话..."
-                      className="w-full px-4 py-3 bg-[#050a14] border border-cyan-500/15 text-white text-sm placeholder-slate-600 focus:outline-none focus:border-cyan-500/40 transition-colors resize-none font-mono"
+                      value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required rows={5}
+                      placeholder="任何想法都可以..."
+                      className="w-full px-4 py-3 rounded-xl bg-[#0c1222] border border-white/5 text-white placeholder-stone-600 text-sm focus:outline-none focus:border-sky-500/30 transition-colors resize-none"
                     />
                   </div>
 
                   <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="btn-cyber w-full flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    type="submit" disabled={sending}
+                    className="btn-primary w-full justify-center disabled:opacity-50"
                   >
-                    {isSubmitting ? (
+                    {sending ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
-                        <span className="font-mono">TRANSMITTING...</span>
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        发送中...
                       </>
                     ) : (
                       <>
                         <Send className="w-4 h-4" />
-                        <span className="font-mono">TRANSMIT</span>
+                        发送
                       </>
                     )}
                   </button>
@@ -132,35 +109,32 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Info */}
+          {/* 联系方式 */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: 0.6 }}
+            transition={{ delay: 0.3 }}
             className="space-y-6"
           >
-            {/* Contact Methods */}
-            <div className="glass border border-cyan-500/10 p-6"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))' }}
-            >
-              <span className="text-[10px] tracking-[0.2em] text-cyan-400/60 font-mono">CHANNELS</span>
-              <div className="mt-4 space-y-3">
-                {contactMethods.map((method) => {
-                  const Icon = method.icon
+            <div className="card">
+              <span className="text-xs text-stone-500 mb-4 block">其他联系方式</span>
+              <div className="space-y-3">
+                {channels.map((ch) => {
+                  const Icon = ch.icon
                   return (
                     <a
-                      key={method.label}
-                      href={method.href}
+                      key={ch.label}
+                      href={ch.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-3 border border-transparent hover:border-cyan-500/15 hover:bg-cyan-500/5 transition-all group"
+                      className="flex items-center gap-4 p-3 rounded-xl hover:bg-sky-500/5 transition-colors group"
                     >
-                      <div className="w-10 h-10 border border-cyan-500/20 bg-cyan-500/5 flex items-center justify-center group-hover:border-cyan-500/40 transition-colors">
-                        <Icon className="w-4 h-4 text-cyan-400" />
+                      <div className="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/15 flex items-center justify-center group-hover:border-sky-500/30 transition-colors">
+                        <Icon className="w-4 h-4 text-sky-400" />
                       </div>
                       <div>
-                        <div className="text-[10px] tracking-wider text-cyan-500/50 font-mono">{method.label}</div>
-                        <div className="text-sm text-slate-300">{method.value}</div>
+                        <div className="text-xs text-stone-500">{ch.label}</div>
+                        <div className="text-sm text-stone-300">{ch.value}</div>
                       </div>
                     </a>
                   )
@@ -168,29 +142,25 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Info */}
-            <div className="glass border border-cyan-500/10 p-6">
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 text-sm text-slate-400">
-                  <MapPin className="w-4 h-4 text-cyan-500/60" />
+            <div className="card">
+              <div className="space-y-3 text-sm text-stone-400">
+                <div className="flex items-center gap-3">
+                  <MapPin className="w-4 h-4 text-sky-500/60" />
                   <span>中国</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-slate-400">
-                  <Clock className="w-4 h-4 text-cyan-500/60" />
+                <div className="flex items-center gap-3">
+                  <Clock className="w-4 h-4 text-sky-500/60" />
                   <span>通常 24 小时内回复</span>
                 </div>
               </div>
             </div>
 
-            {/* Collaboration */}
-            <div className="glass border border-cyan-500/10 p-6"
-              style={{ clipPath: 'polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px))' }}
-            >
-              <span className="text-[10px] tracking-[0.2em] text-cyan-400/60 font-mono">COLLABORATION.OPTIONS</span>
-              <div className="mt-4 space-y-2">
-                {['开源项目协作', '技术文章撰写', '技术咨询与培训', '项目外包合作'].map((item) => (
-                  <div key={item} className="flex items-center gap-2 text-sm text-slate-400">
-                    <div className="w-1 h-1 rounded-full bg-cyan-400" />
+            <div className="card">
+              <span className="text-xs text-stone-500 mb-3 block">欢迎聊的话题</span>
+              <div className="space-y-2 text-sm text-stone-400">
+                {['写作与创作', 'AI 与技术', '读书与思考', '合作与交流'].map((item) => (
+                  <div key={item} className="flex items-center gap-2">
+                    <div className="w-1 h-1 rounded-full bg-sky-400" />
                     {item}
                   </div>
                 ))}

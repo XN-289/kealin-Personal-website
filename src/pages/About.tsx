@@ -1,47 +1,28 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
-import { MapPin, Calendar, Briefcase, Code2, Database, Globe, Server, Smartphone, GitBranch, Terminal, Cpu, Layers } from 'lucide-react'
+import { MapPin, BookOpen, Sparkles, Pen, Heart } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const timeline = [
-  {
-    year: '2024',
-    title: '持续进化',
-    desc: '探索前沿技术，参与开源项目，分享技术知识',
-    icon: Cpu,
-    status: 'ACTIVE',
-  },
-  {
-    year: '2022',
-    title: '技能升级',
-    desc: '深入学习全栈开发，掌握多种技术栈',
-    icon: Layers,
-    status: 'COMPLETED',
-  },
-  {
-    year: '2020',
-    title: '系统初始化',
-    desc: '开始学习编程，探索计算机科学的奥秘',
-    icon: Terminal,
-    status: 'COMPLETED',
-  },
-]
-
-const skillMatrix = [
-  { category: 'FRONTEND', icon: Globe, items: ['React', 'Vue', 'TypeScript', 'Next.js', 'Tailwind'], color: 'cyan' },
-  { category: 'BACKEND', icon: Server, items: ['Node.js', 'Python', 'Go', 'Express', 'FastAPI'], color: 'violet' },
-  { category: 'DATABASE', icon: Database, items: ['MySQL', 'PostgreSQL', 'MongoDB', 'Redis'], color: 'emerald' },
-  { category: 'MOBILE', icon: Smartphone, items: ['React Native', 'Flutter', '小程序'], color: 'cyan' },
-  { category: 'DEVOPS', icon: GitBranch, items: ['Docker', 'K8s', 'CI/CD', 'AWS', 'Linux'], color: 'violet' },
-  { category: 'SYSTEM', icon: Code2, items: ['C/C++', 'Rust', '算法', '数据结构'], color: 'emerald' },
-]
-
 const interests = [
-  '开源贡献', '技术写作', '系统设计', '新语言探索',
-  'AI 领域', '阅读', '运动', '游戏',
+  '写作', '阅读', 'AI', '哲学', '心理学', '设计', '音乐', '电影',
+  '城市漫步', '咖啡', '摄影', '播客',
+]
+
+const timeline = [
+  { year: '现在', title: '持续写作与探索', desc: '用文字和 AI 去理解世界，记录思考的过程' },
+  { year: '2023', title: '开始接触 AI', desc: '发现 AI 不只是工具，更是思考的伙伴' },
+  { year: '2022', title: '开始写作', desc: '在文字中找到了表达自己的方式' },
+  { year: '更早', title: '一切的开始', desc: '对世界充满好奇，总想知道为什么' },
+]
+
+const readingList = [
+  { title: '《百年孤独》', author: '马尔克斯', note: '魔幻现实主义的极致' },
+  { title: '《局外人》', author: '加缪', note: '荒诞与存在' },
+  { title: '《人类简史》', author: '赫拉利', note: '重新理解人类' },
+  { title: '《设计中的设计》', author: '原研哉', note: '少即是多' },
 ]
 
 export default function About() {
@@ -49,27 +30,27 @@ export default function About() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.skill-card', {
-        scrollTrigger: {
-          trigger: '.skills-section',
-          start: 'top 80%',
-        },
-        y: 40,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: 'power2.out',
-      })
-
       gsap.from('.timeline-item', {
         scrollTrigger: {
           trigger: '.timeline-section',
           start: 'top 80%',
         },
-        x: -30,
+        x: -20,
         opacity: 0,
         stagger: 0.2,
         duration: 0.6,
+        ease: 'power2.out',
+      })
+
+      gsap.from('.book-item', {
+        scrollTrigger: {
+          trigger: '.reading-section',
+          start: 'top 80%',
+        },
+        y: 20,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.5,
         ease: 'power2.out',
       })
     }, containerRef)
@@ -80,75 +61,53 @@ export default function About() {
   return (
     <div ref={containerRef} className="min-h-screen pt-28 pb-16">
       {/* Header */}
-      <section className="container-custom mb-20">
+      <section className="container-custom mb-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* 面包屑 */}
-          <div className="flex items-center gap-2 mb-6 text-xs font-mono">
-            <span className="text-cyan-500/40">HOME</span>
-            <span className="text-cyan-500/20">/</span>
-            <span className="text-cyan-400">ABOUT</span>
-          </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-            关于<span className="gradient-text-cyan">我</span>
+          <h1 className="text-3xl md:text-4xl font-light text-white/90 mb-3">
+            关于<span className="gradient-text font-medium">我</span>
           </h1>
-          <p className="text-sm font-mono text-cyan-500/40">USER.PROFILE // LOADED</p>
+          <p className="text-stone-500">一个试图理解世界的人</p>
         </motion.div>
       </section>
 
-      {/* Profile Card */}
+      {/* 自我介绍 */}
       <section className="container-custom mb-20">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="glass border border-cyan-500/10 p-8"
-          style={{ clipPath: 'polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px))' }}
+          className="card"
         >
           <div className="flex flex-col md:flex-row gap-8">
-            {/* 头像 */}
             <div className="flex-shrink-0">
-              <div className="w-40 h-40 mx-auto md:mx-0 relative">
-                <div className="absolute inset-0 border-2 border-cyan-400/20 rotate-45" />
-                <div className="absolute inset-4 border border-cyan-400/10 rotate-45" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-6xl">👨‍💻</span>
-                </div>
+              <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-sky-400/10 to-sky-600/10 border border-sky-400/15 flex items-center justify-center mx-auto md:mx-0">
+                <span className="text-5xl">🧑‍💻</span>
               </div>
             </div>
-
-            {/* 信息 */}
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-white mb-1">你的名字</h2>
-              <p className="text-cyan-400 font-mono text-sm mb-6">FULL_STACK.DEVELOPER // TECH.WRITER</p>
-
-              <div className="flex flex-wrap gap-4 mb-6 text-sm text-slate-400">
-                <span className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-cyan-500/60" />
-                  中国
-                </span>
-                <span className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-cyan-500/60" />
-                  2020 开始编程
-                </span>
-                <span className="flex items-center gap-2">
-                  <Briefcase className="w-4 h-4 text-cyan-500/60" />
-                  自由职业者
-                </span>
+              <h2 className="text-xl font-medium text-white/90 mb-1">你的名字</h2>
+              <div className="flex items-center gap-2 text-sm text-stone-500 mb-6">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>中国</span>
+                <span className="text-stone-700">·</span>
+                <span>写作者 / 思考者</span>
               </div>
-
-              <div className="space-y-4 text-slate-300 leading-relaxed">
+              <div className="space-y-4 text-stone-300 leading-relaxed">
                 <p>
-                  我是一名热爱技术的开发者，对编程充满热情。从2020年开始接触编程，
-                  一路走来，我不断学习新技术，探索编程的无限可能。
+                  我是一个对世界充满好奇的人。喜欢阅读、写作、思考，也喜欢用技术去辅助我的表达。
+                  对我来说，技术不是目的，而是理解世界的一种方式。
                 </p>
                 <p>
-                  我相信技术是解构世界的工具，代码是构建未来的语言。
-                  在这个网站上，我记录我的技术旅程、分享项目经验，以及一些关于技术与世界的思考。
+                  我相信文字的力量。一篇文章、一个想法，有时候比任何代码都有力量。
+                  所以我把更多的时间花在写作和思考上，用人文的视角去观察这个世界。
+                </p>
+                <p>
+                  AI 是我最近发现的好伙伴。它不是替我写作，而是帮我更好地思考。
+                  人和机器的协作，或许是一种新的创作方式。
                 </p>
               </div>
             </div>
@@ -156,82 +115,27 @@ export default function About() {
         </motion.div>
       </section>
 
-      {/* Skills Matrix */}
-      <section className="skills-section container-custom mb-20">
-        <div className="flex items-center gap-4 mb-12">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/20" />
-          <h2 className="text-xs tracking-[0.3em] text-cyan-400/60 font-mono">SKILL.MATRIX</h2>
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/20" />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {skillMatrix.map((skill) => {
-            const Icon = skill.icon
-            const colorMap: Record<string, { accent: string; border: string; bg: string }> = {
-              cyan: { accent: 'text-cyan-400', border: 'border-cyan-500/20', bg: 'bg-cyan-500/10' },
-              violet: { accent: 'text-violet-400', border: 'border-violet-500/20', bg: 'bg-violet-500/10' },
-              emerald: { accent: 'text-emerald-400', border: 'border-emerald-500/20', bg: 'bg-emerald-500/10' },
-            }
-            const c = colorMap[skill.color] || colorMap.cyan
-
-            return (
-              <div key={skill.category} className="skill-card card-cyber">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`w-10 h-10 ${c.border} border ${c.bg} flex items-center justify-center`}>
-                    <Icon className={`w-5 h-5 ${c.accent}`} />
-                  </div>
-                  <span className="text-[10px] tracking-[0.2em] text-cyan-400/60 font-mono">{skill.category}</span>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {skill.items.map((item) => (
-                    <span key={item} className="text-xs px-3 py-1.5 bg-white/5 text-slate-300 border border-white/5 hover:border-cyan-500/30 hover:text-cyan-300 transition-colors cursor-default">
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </section>
-
-      {/* Timeline */}
-      <section className="timeline-section container-custom mb-20">
-        <div className="flex items-center gap-4 mb-12">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/20" />
-          <h2 className="text-xs tracking-[0.3em] text-cyan-400/60 font-mono">TIMELINE</h2>
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/20" />
-        </div>
-
-        <div className="max-w-2xl mx-auto">
-          {timeline.map((item, index) => {
+      {/* 我在做什么 */}
+      <section className="container-custom mb-20">
+        <h2 className="text-xl font-light text-white/90 mb-8">
+          我在<span className="gradient-text font-medium">做什么</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {[
+            { icon: Pen, title: '写作', desc: '记录思考、分享观点，用文字构建自己的世界' },
+            { icon: Sparkles, title: 'AI 协作', desc: '探索人和 AI 的协作方式，用技术辅助创作' },
+            { icon: BookOpen, title: '阅读', desc: '读书、看文章、听播客，保持对世界的好奇' },
+            { icon: Heart, title: '生活', desc: '认真生活，因为所有的创作都来源于生活' },
+          ].map((item) => {
             const Icon = item.icon
             return (
-              <div key={item.year} className="timeline-item relative pl-10 pb-12 last:pb-0">
-                {/* 连接线 */}
-                {index < timeline.length - 1 && (
-                  <div className="absolute left-[14px] top-10 bottom-0 w-px bg-gradient-to-b from-cyan-500/30 to-transparent" />
-                )}
-
-                {/* 节点 */}
-                <div className="absolute left-0 top-2 w-[30px] h-[30px] border border-cyan-500/30 bg-[#0a1628] flex items-center justify-center rotate-45">
-                  <Icon className="w-3.5 h-3.5 text-cyan-400 -rotate-45" />
+              <div key={item.title} className="card flex items-start gap-4">
+                <div className="w-10 h-10 rounded-lg bg-sky-500/10 border border-sky-500/15 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-4 h-4 text-sky-400" />
                 </div>
-
-                {/* 内容 */}
-                <div className="glass border border-cyan-500/10 p-5 ml-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono text-cyan-400">{item.year}</span>
-                    <span className={`text-[10px] font-mono tracking-wider px-2 py-0.5 ${
-                      item.status === 'ACTIVE'
-                        ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20'
-                        : 'text-slate-500 bg-white/5 border border-white/5'
-                    }`}>
-                      {item.status}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold text-white mb-1">{item.title}</h3>
-                  <p className="text-sm text-slate-400">{item.desc}</p>
+                <div>
+                  <h3 className="font-medium text-white/90 mb-1">{item.title}</h3>
+                  <p className="text-sm text-stone-400">{item.desc}</p>
                 </div>
               </div>
             )
@@ -239,26 +143,58 @@ export default function About() {
         </div>
       </section>
 
-      {/* Interests */}
-      <section className="container-custom">
-        <div className="flex items-center gap-4 mb-12">
-          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/20" />
-          <h2 className="text-xs tracking-[0.3em] text-cyan-400/60 font-mono">INTERESTS</h2>
-          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/20" />
+      {/* 时间线 */}
+      <section className="timeline-section container-custom mb-20">
+        <h2 className="text-xl font-light text-white/90 mb-8">
+          我的<span className="gradient-text font-medium">轨迹</span>
+        </h2>
+        <div className="space-y-6">
+          {timeline.map((item) => (
+            <div key={item.year} className="timeline-item flex gap-6">
+              <div className="flex-shrink-0 w-16 text-right">
+                <span className="text-sm font-medium text-sky-400/70">{item.year}</span>
+              </div>
+              <div className="relative pl-6 border-l border-sky-500/15">
+                <div className="absolute left-0 top-2 w-2 h-2 rounded-full bg-sky-500/40 -translate-x-[4.5px]" />
+                <h3 className="font-medium text-white/90 mb-1">{item.title}</h3>
+                <p className="text-sm text-stone-400">{item.desc}</p>
+              </div>
+            </div>
+          ))}
         </div>
+      </section>
 
-        <div className="flex flex-wrap justify-center gap-3 max-w-2xl mx-auto">
-          {interests.map((interest, i) => (
-            <motion.div
-              key={interest}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05, duration: 0.4 }}
-              className="px-5 py-2.5 border border-cyan-500/15 bg-cyan-500/5 text-cyan-300 text-sm hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-all cursor-default"
-            >
-              {interest}
-            </motion.div>
+      {/* 阅读清单 */}
+      <section className="reading-section container-custom mb-20">
+        <h2 className="text-xl font-light text-white/90 mb-8">
+          最近在<span className="gradient-text font-medium">读</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {readingList.map((book) => (
+            <div key={book.title} className="book-item card flex items-start gap-4">
+              <div className="w-10 h-14 rounded bg-gradient-to-b from-sky-500/20 to-sky-600/10 border border-sky-500/15 flex items-center justify-center flex-shrink-0">
+                <BookOpen className="w-4 h-4 text-sky-400" />
+              </div>
+              <div>
+                <h3 className="font-medium text-white/90 text-sm">{book.title}</h3>
+                <p className="text-xs text-stone-500 mb-1">{book.author}</p>
+                <p className="text-xs text-stone-400">{book.note}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 兴趣标签 */}
+      <section className="container-custom">
+        <h2 className="text-xl font-light text-white/90 mb-8">
+          兴趣<span className="gradient-text font-medium">标签</span>
+        </h2>
+        <div className="flex flex-wrap gap-2">
+          {interests.map((item) => (
+            <span key={item} className="px-4 py-2 rounded-full bg-sky-500/5 border border-sky-500/10 text-sm text-sky-300/70">
+              {item}
+            </span>
           ))}
         </div>
       </section>
