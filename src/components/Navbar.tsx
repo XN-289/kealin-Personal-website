@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Home, User, BookOpen, FolderOpen, Mail, Pen } from 'lucide-react'
+import { Menu, X, Home, User, BookOpen, Mail, Pen } from 'lucide-react'
 
 const navItems = [
   { path: '/', label: '首页', icon: Home },
   { path: '/about', label: '关于', icon: User },
   { path: '/blog', label: '文章', icon: BookOpen },
-  { path: '/projects', label: '项目', icon: FolderOpen },
   { path: '/contact', label: '联系', icon: Mail },
 ]
 
@@ -38,15 +37,15 @@ export default function Navbar() {
       <div className="container-custom">
         <div className={`flex items-center justify-between px-6 py-3 rounded-2xl transition-all duration-500 ${
           scrolled
-            ? 'bg-[#0c1222]/80 backdrop-blur-xl border border-white/5 shadow-lg shadow-black/10'
+            ? 'bg-[#1a1a2e]/80 backdrop-blur-xl border border-white/5 shadow-lg shadow-black/10'
             : 'bg-transparent'
         }`}>
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center group-hover:bg-sky-500/20 transition-colors">
-              <Pen className="w-4 h-4 text-sky-400" />
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center group-hover:bg-amber-500/20 transition-colors">
+              <Pen className="w-4 h-4 text-amber-400" />
             </div>
-            <span className="text-sm font-medium text-sky-200/80 tracking-wide hidden sm:block">
+            <span className="text-sm font-medium text-amber-200/80 tracking-wide hidden sm:block">
               解构世界
             </span>
           </Link>
@@ -62,8 +61,8 @@ export default function Navbar() {
                   to={item.path}
                   className={`relative px-4 py-2 text-sm rounded-lg transition-all duration-300 flex items-center gap-2 ${
                     isActive
-                      ? 'text-sky-200 bg-sky-500/10'
-                      : 'text-stone-400 hover:text-sky-300 hover:bg-white/5'
+                      ? 'text-amber-200 bg-amber-500/10'
+                      : 'text-stone-400 hover:text-amber-300 hover:bg-white/5'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -76,7 +75,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-stone-400 hover:text-sky-300 transition-colors"
+            className="md:hidden p-2 text-stone-400 hover:text-amber-300 transition-colors"
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -91,7 +90,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden mx-4 mt-2 rounded-2xl bg-[#111a2e]/95 backdrop-blur-xl border border-white/5 overflow-hidden"
+            className="md:hidden mx-4 mt-2 rounded-2xl bg-[#1a1a2e]/95 backdrop-blur-xl border border-white/5 overflow-hidden"
           >
             <div className="py-2">
               {navItems.map((item) => {
@@ -103,8 +102,8 @@ export default function Navbar() {
                     to={item.path}
                     className={`flex items-center gap-3 px-6 py-3 transition-all ${
                       isActive
-                        ? 'text-sky-200 bg-sky-500/10'
-                        : 'text-stone-400 hover:text-sky-300 hover:bg-white/5'
+                        ? 'text-amber-200 bg-amber-500/10'
+                        : 'text-stone-400 hover:text-amber-300 hover:bg-white/5'
                     }`}
                   >
                     <Icon className="w-4 h-4" />

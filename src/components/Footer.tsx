@@ -16,10 +16,10 @@ export default function Footer() {
           {/* 品牌 */}
           <div>
             <Link to="/" className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center">
-                <Pen className="w-4 h-4 text-sky-400" />
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                <Pen className="w-4 h-4 text-amber-400" />
               </div>
-              <span className="text-sm font-medium text-sky-200/80">解构世界</span>
+              <span className="text-sm font-medium text-amber-200/80">解构世界</span>
             </Link>
             <p className="text-sm text-stone-500 leading-relaxed mb-4">
               用文字记录思考，用技术辅助表达。
@@ -35,7 +35,7 @@ export default function Footer() {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-9 h-9 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-stone-500 hover:text-sky-400 hover:border-sky-500/20 transition-all"
+                    className="w-9 h-9 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-stone-500 hover:text-amber-400 hover:border-amber-500/20 transition-all"
                     aria-label={s.label}
                   >
                     <Icon className="w-4 h-4" />
@@ -53,11 +53,10 @@ export default function Footer() {
                 { label: '首页', path: '/' },
                 { label: '关于我', path: '/about' },
                 { label: '文章', path: '/blog' },
-                { label: '项目', path: '/projects' },
                 { label: '联系', path: '/contact' },
               ].map((link) => (
                 <li key={link.label}>
-                  <Link to={link.path} className="text-sm text-stone-500 hover:text-sky-400 transition-colors">
+                  <Link to={link.path} className="text-sm text-stone-500 hover:text-amber-400 transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -84,7 +83,7 @@ export default function Footer() {
             © {new Date().getFullYear()} 解构世界
           </p>
           <p className="text-xs text-stone-600 flex items-center gap-1">
-            用 <Heart className="w-3 h-3 text-sky-500 fill-sky-500" /> 和 React 构建
+            用 <Heart className="w-3 h-3 text-amber-500 fill-amber-500" /> 和 React 构建
           </p>
         </div>
       </div>

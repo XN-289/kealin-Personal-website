@@ -79,7 +79,7 @@ export default function DigitalWorld() {
             ctx.beginPath()
             ctx.moveTo(particles[i].x, particles[i].y)
             ctx.lineTo(particles[j].x, particles[j].y)
-            ctx.strokeStyle = `rgba(56, 189, 248, ${opacity})`
+            ctx.strokeStyle = `rgba(212, 165, 116, ${opacity})`
             ctx.lineWidth = 0.4
             ctx.stroke()
           }
@@ -137,8 +137,8 @@ export default function DigitalWorld() {
 
         // 绘制柔和光点
         const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 4)
-        gradient.addColorStop(0, `rgba(56, 189, 248, ${currentOpacity})`)
-        gradient.addColorStop(1, 'rgba(56, 189, 248, 0)')
+        gradient.addColorStop(0, `rgba(212, 165, 116, ${currentOpacity})`)
+        gradient.addColorStop(1, 'rgba(212, 165, 116, 0)')
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size * 4, 0, Math.PI * 2)
         ctx.fillStyle = gradient
@@ -147,7 +147,7 @@ export default function DigitalWorld() {
         // 核心
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size * 0.6, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(186, 230, 253, ${currentOpacity * 1.2})`
+        ctx.fillStyle = `rgba(255, 237, 213, ${currentOpacity * 1.2})`
         ctx.fill()
       })
 

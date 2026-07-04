@@ -53,7 +53,7 @@ export default function Home() {
             transition={{ duration: 1, ease: 'easeOut' }}
             className="mb-10"
           >
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-sky-400/15 to-sky-600/10 border border-sky-400/15 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-amber-400/15 to-amber-600/10 border border-amber-400/15 flex items-center justify-center">
               <span className="text-3xl">✨</span>
             </div>
           </motion.div>
@@ -142,8 +142,8 @@ export default function Home() {
               const Icon = item.icon
               return (
                 <div key={item.title} className="feature-card card">
-                  <div className="w-11 h-11 rounded-xl bg-sky-500/8 border border-sky-500/12 flex items-center justify-center mb-5">
-                    <Icon className="w-5 h-5 text-sky-400" />
+                  <div className="w-11 h-11 rounded-xl bg-amber-500/8 border border-amber-500/12 flex items-center justify-center mb-5">
+                    <Icon className="w-5 h-5 text-amber-400" />
                   </div>
                   <h3 className="text-base font-medium text-white/90 mb-2">{item.title}</h3>
                   <p className="text-sm text-stone-400 leading-relaxed">{item.desc}</p>
@@ -164,7 +164,7 @@ export default function Home() {
               </h2>
               <p className="text-stone-500 text-sm">最近写的一些东西</p>
             </div>
-            <Link to="/blog" className="text-sm text-sky-400/60 hover:text-sky-300 transition-colors">
+            <Link to="/blog" className="text-sm text-amber-400/60 hover:text-amber-300 transition-colors">
               全部 →
             </Link>
           </div>
@@ -190,12 +190,12 @@ export default function Home() {
                         {post.date}
                       </span>
                     </div>
-                    <h3 className="text-lg font-medium text-white/85 group-hover:text-sky-300 transition-colors mb-1">
+                    <h3 className="text-lg font-medium text-white/85 group-hover:text-amber-300 transition-colors mb-1">
                       {post.title}
                     </h3>
                     <p className="text-sm text-stone-500 line-clamp-1">{post.excerpt}</p>
                   </div>
-                  <span className="text-sm text-stone-600 group-hover:text-sky-400 transition-colors flex-shrink-0">
+                  <span className="text-sm text-stone-600 group-hover:text-amber-400 transition-colors flex-shrink-0">
                     阅读 →
                   </span>
                 </Link>

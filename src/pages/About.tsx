@@ -59,7 +59,7 @@ export default function About() {
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="card">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex-shrink-0">
-              <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-sky-400/12 to-sky-600/8 border border-sky-400/12 flex items-center justify-center mx-auto md:mx-0">
+              <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-amber-400/12 to-amber-600/8 border border-amber-400/12 flex items-center justify-center mx-auto md:mx-0">
                 <span className="text-4xl">🧑‍💻</span>
               </div>
             </div>
@@ -107,8 +107,8 @@ export default function About() {
             const Icon = item.icon
             return (
               <div key={item.title} className="card flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-sky-500/8 border border-sky-500/12 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-4 h-4 text-sky-400" />
+                <div className="w-10 h-10 rounded-xl bg-amber-500/8 border border-amber-500/12 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-4 h-4 text-amber-400" />
                 </div>
                 <div>
                   <h3 className="font-medium text-white/90 mb-1">{item.title}</h3>
@@ -131,10 +131,10 @@ export default function About() {
           {timeline.map((item) => (
             <div key={item.year} className="timeline-item flex gap-6">
               <div className="flex-shrink-0 w-14 text-right">
-                <span className="text-sm font-medium text-sky-400/70">{item.year}</span>
+                <span className="text-sm font-medium text-amber-400/70">{item.year}</span>
               </div>
-              <div className="relative pl-6 border-l border-sky-500/12">
-                <div className="absolute left-0 top-2.5 w-1.5 h-1.5 rounded-full bg-sky-500/40 -translate-x-[4px]" />
+              <div className="relative pl-6 border-l border-amber-500/12">
+                <div className="absolute left-0 top-2.5 w-1.5 h-1.5 rounded-full bg-amber-500/40 -translate-x-[4px]" />
                 <h3 className="font-medium text-white/90 mb-1">{item.title}</h3>
                 <p className="text-sm text-stone-400">{item.desc}</p>
               </div>
@@ -153,8 +153,8 @@ export default function About() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {readingList.map((book) => (
             <div key={book.title} className="book-item card flex items-start gap-4">
-              <div className="w-9 h-13 rounded-lg bg-gradient-to-b from-sky-500/15 to-sky-600/8 border border-sky-500/12 flex items-center justify-center flex-shrink-0">
-                <BookOpen className="w-4 h-4 text-sky-400" />
+              <div className="w-9 h-13 rounded-lg bg-gradient-to-b from-amber-500/15 to-amber-600/8 border border-amber-500/12 flex items-center justify-center flex-shrink-0">
+                <BookOpen className="w-4 h-4 text-amber-400" />
               </div>
               <div>
                 <h3 className="font-medium text-white/90 text-sm mb-0.5">{book.title}</h3>
@@ -175,7 +175,7 @@ export default function About() {
         </div>
         <div className="flex flex-wrap gap-2.5">
           {interests.map((item) => (
-            <span key={item} className="px-4 py-2 rounded-xl bg-sky-500/5 border border-sky-500/8 text-sm text-sky-300/60">
+            <span key={item} className="px-4 py-2 rounded-xl bg-amber-500/5 border border-amber-500/8 text-sm text-amber-300/60">
               {item}
             </span>
           ))}
