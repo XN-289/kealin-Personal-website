@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { GithubIcon } from './Icons'
 
-const navItems = [
+const links = [
   { path: '/', label: '首页' },
   { path: '/about', label: '关于' },
   { path: '/blog', label: '文章' },
@@ -12,74 +12,67 @@ const navItems = [
 ]
 
 export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
-  const location = useLocation()
+  const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const { pathname } = useLocation()
 
-  useEffect(() => { setIsOpen(false) }, [location])
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => setOpen(false), [pathname])
 
   return (
     <>
-      {/* 左侧脊柱线 */}
       <div className="rail"><i /><i /><i /></div>
-      {/* 角落十字准星 */}
       <div className="cross cross--tr" />
       <div className="cross cross--bl" />
       <div className="cross cross--br" />
 
-      {/* 导航 */}
-      <motion.nav
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="nav"
-      >
+      <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <Link to="/" className="nav__brand">解构世界</Link>
 
         <div className="nav__links hidden md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={location.pathname === item.path ? 'is-active' : ''}
-            >
-              {item.label}
+          {links.map((l) => (
+            <Link key={l.path} to={l.path} className={`nav__link ${pathname === l.path ? 'active' : ''}`}>
+              {l.label}
             </Link>
           ))}
-          <span className="nav__sep">|</span>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+          <span className="nav__sep">·</span>
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav__link">
             <GithubIcon className="w-3.5 h-3.5" />
           </a>
         </div>
 
-        <button onClick={() => setIsOpen(!isOpen)} className="md:hidden" style={{ color: 'var(--ink-muted)' }}>
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        <button onClick={() => setOpen(!open)} className="md:hidden" style={{ color: 'var(--ink-muted)' }}>
+          {open ? <X size={18} /> : <Menu size={18} />}
         </button>
-      </motion.nav>
+      </nav>
 
-      {/* Mobile */}
       <AnimatePresence>
-        {isOpen && (
+        {open && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
+            initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: [0.22, 0.61, 0.36, 1] }}
             style={{
               position: 'fixed', top: 'var(--nav-h)', left: 0, right: 0, zIndex: 40,
-              background: 'rgba(26, 26, 46, 0.98)', backdropFilter: 'blur(12px)',
+              background: 'rgba(26, 26, 46, 0.97)', backdropFilter: 'blur(16px)',
               borderBottom: '1px solid var(--line)',
             }}
           >
-            {navItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
+            {links.map((l) => (
+              <Link key={l.path} to={l.path}
                 style={{
-                  display: 'block', padding: '16px var(--pad-x)',
-                  color: location.pathname === item.path ? 'var(--ink)' : 'var(--ink-muted)',
-                  fontSize: '13px', letterSpacing: '.06em',
-                }}
-              >
-                {item.label}
+                  display: 'block', padding: '14px var(--pad)',
+                  color: pathname === l.path ? 'var(--ink)' : 'var(--ink-muted)',
+                  fontSize: '13px', letterSpacing: '0.06em',
+                  borderBottom: '1px solid var(--line)',
+                }}>
+                {l.label}
               </Link>
             ))}
           </motion.div>

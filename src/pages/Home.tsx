@@ -2,267 +2,255 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { BookOpen, Pen, MessageCircle, Sparkles } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { loadBlogPosts, type BlogPost } from '../utils/content'
 
-gsap.registerPlugin(ScrollTrigger)
+// 统一的入场动画
+const ease = [0.22, 0.61, 0.36, 1] as const
+const fade = (delay = 0) => ({
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.6, delay, ease },
+})
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const [posts, setPosts] = useState<BlogPost[]>([])
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end start'],
-  })
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0])
-  const heroY = useTransform(scrollYProgress, [0, 0.2], [0, -30])
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -24])
+  const heroOp = useTransform(scrollYProgress, [0, 0.3], [1, 0])
 
   useEffect(() => { loadBlogPosts().then(setPosts) }, [])
 
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('[data-reveal]', {
-        y: 20, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power2.out', delay: 0.3,
-      })
-      gsap.from('.feature-card', {
-        scrollTrigger: { trigger: '.features-section', start: 'top 85%' },
-        y: 25, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
-      })
-      gsap.from('.post-card', {
-        scrollTrigger: { trigger: '.posts-section', start: 'top 85%' },
-        y: 20, opacity: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out',
-      })
-    }, containerRef)
-    return () => ctx.revert()
-  }, [])
-
   return (
-    <div ref={containerRef}>
-      {/* ===== HERO ===== */}
+    <div ref={ref}>
+      {/* HERO */}
       <section style={{
         minHeight: '100vh',
-        padding: '0 var(--pad-x) 0 calc(var(--rail-x) + 48px)',
         display: 'flex', alignItems: 'center',
+        padding: '0 var(--pad) 0 calc(var(--rail) + 40px)',
       }}>
-        <motion.div style={{ opacity: heroOpacity, y: heroY }} className="container-custom">
-          {/* 大标题 - Sac 风格 */}
-          <div data-reveal style={{ marginBottom: '12px' }}>
+        <motion.div style={{ y: heroY, opacity: heroOp }} className="wrap">
+          <motion.div {...fade(0.1)} style={{ marginBottom: '8px' }}>
             <div style={{
               fontFamily: 'var(--serif)', fontWeight: 600,
-              fontSize: 'clamp(64px, 12vw, 140px)', lineHeight: .9,
-              letterSpacing: '-.02em', color: 'var(--ink)',
-              marginBottom: '8px',
+              fontSize: 'clamp(56px, 11vw, 120px)', lineHeight: 0.9,
+              letterSpacing: '-0.02em',
             }}>
               解构
             </div>
             <div style={{
               fontFamily: 'var(--serif)', fontWeight: 600,
-              fontSize: 'clamp(64px, 12vw, 140px)', lineHeight: .9,
-              letterSpacing: '-.02em',
+              fontSize: 'clamp(56px, 11vw, 120px)', lineHeight: 0.9,
+              letterSpacing: '-0.02em',
               background: 'linear-gradient(135deg, var(--accent), #c49660)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
             }}>
               世界
             </div>
-          </div>
+          </motion.div>
 
-          {/* 副标题 */}
-          <div data-reveal style={{ marginBottom: '32px' }}>
+          <motion.div {...fade(0.25)} style={{ marginBottom: '28px' }}>
             <div style={{
-              display: 'flex', alignItems: 'center', gap: '10px',
-              fontSize: '14px', letterSpacing: '.05em', color: 'var(--accent)',
-              marginBottom: '20px',
+              display: 'flex', alignItems: 'center', gap: '8px',
+              fontSize: '13px', color: 'var(--accent)', letterSpacing: '0.04em',
+              marginBottom: '16px',
             }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)', display: 'inline-block' }} />
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }} />
               一个年轻人的数字花园
             </div>
             <p style={{
               fontFamily: 'var(--serif)', fontWeight: 300,
-              fontSize: 'clamp(18px, 2vw, 24px)', lineHeight: 1.7,
-              color: 'var(--ink-soft)', maxWidth: '26em',
+              fontSize: 'clamp(17px, 1.8vw, 22px)', lineHeight: 1.75,
+              color: 'var(--ink-soft)', maxWidth: '24em',
             }}>
               用文字记录思考，用技术辅助表达，
               <br />
               在这个空间里种下对世界的观察。
             </p>
-          </div>
+          </motion.div>
 
-          {/* CTA */}
-          <div data-reveal style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <Link to="/blog" className="btn btn--ghost">
-              <BookOpen className="w-4 h-4" />
-              读我的文章
+          <motion.div {...fade(0.4)} style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <Link to="/blog" className="btn">
+              <BookOpen size={15} />
+              <span>读我的文章</span>
               <span className="arr">→</span>
             </Link>
-            <Link to="/about" className="btn btn--ghost">
-              <MessageCircle className="w-4 h-4" />
-              了解我
+            <Link to="/about" className="btn">
+              <MessageCircle size={15} />
+              <span>了解我</span>
               <span className="arr">→</span>
             </Link>
-          </div>
+          </motion.div>
         </motion.div>
       </section>
 
-      {/* ===== 我在做什么 ===== */}
-      <section className="features-section" style={{
-        padding: '80px 0',
-        borderTop: '1px solid var(--line)',
-      }}>
-        <div className="container-custom">
-          <div style={{ marginBottom: '48px' }}>
+      {/* 能力 */}
+      <Features />
+
+      {/* 文章 */}
+      <Posts posts={posts} />
+
+      {/* 引言 */}
+      <Quote />
+    </div>
+  )
+}
+
+function Features() {
+  const items = [
+    { icon: Pen, title: '写作', desc: '把想法变成文字，在文字中寻找意义。' },
+    { icon: Sparkles, title: 'AI 协作', desc: '把 AI 当作思考的伙伴，用技术辅助表达。' },
+    { icon: BookOpen, title: '阅读与观察', desc: '读书、看世界、和人聊天。所有输入最终变成输出。' },
+  ]
+
+  return (
+    <section style={{ padding: 'var(--sp-9) 0', borderTop: '1px solid var(--line)' }}>
+      <div className="wrap">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+          style={{ marginBottom: 'var(--sp-7)' }}
+        >
+          <h2 style={{
+            fontFamily: 'var(--serif)', fontWeight: 600,
+            fontSize: 'clamp(28px, 4vw, 40px)', lineHeight: 1.1,
+            marginBottom: '6px',
+          }}>
+            我在做什么
+          </h2>
+          <p style={{ fontSize: '13px', color: 'var(--ink-muted)' }}>用不同的方式理解这个世界</p>
+        </motion.div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+          {items.map((item, i) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.5, delay: i * 0.1, ease: [0.22, 0.61, 0.36, 1] }}
+              className="card"
+            >
+              <div style={{
+                width: 32, height: 32,
+                border: '1px solid var(--line)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: '14px',
+              }}>
+                <item.icon size={15} style={{ color: 'var(--accent)' }} />
+              </div>
+              <h3 style={{
+                fontFamily: 'var(--serif)', fontSize: '16px', fontWeight: 600,
+                marginBottom: '6px',
+              }}>
+                {item.title}
+              </h3>
+              <p style={{ fontSize: '14px', color: 'var(--ink-muted)', lineHeight: 1.7 }}>{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function Posts({ posts }: { posts: BlogPost[] }) {
+  return (
+    <section style={{ padding: 'var(--sp-9) 0', borderTop: '1px solid var(--line)' }}>
+      <div className="wrap">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5, ease: [0.22, 0.61, 0.36, 1] }}
+          style={{
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+            marginBottom: 'var(--sp-6)',
+          }}
+        >
+          <div>
             <h2 style={{
               fontFamily: 'var(--serif)', fontWeight: 600,
-              fontSize: 'clamp(32px, 5vw, 48px)', lineHeight: 1.1,
-              color: 'var(--ink)', marginBottom: '8px',
+              fontSize: 'clamp(28px, 4vw, 40px)', lineHeight: 1.1,
+              marginBottom: '6px',
             }}>
-              我在做什么
+              最新文章
             </h2>
-            <p style={{ fontSize: '13px', color: 'var(--ink-muted)', letterSpacing: '.04em' }}>
-              用不同的方式理解这个世界
-            </p>
+            <p style={{ fontSize: '13px', color: 'var(--ink-muted)' }}>最近写的一些东西</p>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px' }}>
-            {[
-              { icon: Pen, title: '写作', desc: '把想法变成文字，在文字中寻找意义。' },
-              { icon: Sparkles, title: 'AI 协作', desc: '把 AI 当作思考的伙伴，用技术辅助表达。' },
-              { icon: BookOpen, title: '阅读与观察', desc: '读书、看世界、和人聊天。所有的输入，最终都会变成输出。' },
-            ].map((item) => {
-              const Icon = item.icon
-              return (
-                <div key={item.title} className="feature-card card">
-                  <div style={{
-                    width: 36, height: 36,
-                    border: '1px solid var(--line)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '16px',
-                  }}>
-                    <Icon className="w-4 h-4" style={{ color: 'var(--accent)' }} />
-                  </div>
-                  <h3 style={{
-                    fontFamily: 'var(--serif)', fontSize: '18px', fontWeight: 600,
-                    color: 'var(--ink)', marginBottom: '8px',
-                  }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ fontSize: '14px', color: 'var(--ink-muted)', lineHeight: 1.7 }}>
-                    {item.desc}
-                  </p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== 最新文章 ===== */}
-      <section className="posts-section" style={{
-        padding: '80px 0',
-        borderTop: '1px solid var(--line)',
-      }}>
-        <div className="container-custom">
-          <div style={{
-            display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-            marginBottom: '40px',
+          <Link to="/blog" style={{
+            fontSize: '13px', color: 'var(--ink-muted)',
+            borderBottom: '1px solid var(--line)', paddingBottom: '2px',
+            transition: 'color var(--duration), border-color var(--duration)',
           }}>
-            <div>
-              <h2 style={{
-                fontFamily: 'var(--serif)', fontWeight: 600,
-                fontSize: 'clamp(32px, 5vw, 48px)', lineHeight: 1.1,
-                color: 'var(--ink)', marginBottom: '8px',
-              }}>
-                最新文章
-              </h2>
-              <p style={{ fontSize: '13px', color: 'var(--ink-muted)' }}>最近写的一些东西</p>
-            </div>
-            <Link to="/blog" style={{
-              fontSize: '13px', color: 'var(--ink-muted)',
-              borderBottom: '1px solid var(--line)',
-              paddingBottom: '2px',
-              transition: 'color .25s, border-color .25s',
-            }}>
-              全部 →
-            </Link>
-          </div>
-
-          {posts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '60px 0' }}>
-              <BookOpen className="w-8 h-8 mx-auto mb-3" style={{ color: 'var(--ink-muted)', opacity: .3 }} />
-              <p style={{ color: 'var(--ink-muted)', fontSize: '14px' }}>还没有文章</p>
-              <p style={{ color: 'var(--ink-muted)', fontSize: '12px', marginTop: '4px' }}>
-                在 content/blog/ 文件夹中添加 .md 文件
-              </p>
-            </div>
-          ) : (
-            <div>
-              {posts.slice(0, 3).map((post, i) => (
-                <Link
-                  key={post.slug}
-                  to="/blog"
-                  className="post-card"
-                  style={{
-                    display: 'block',
-                    padding: '24px 0',
-                    borderBottom: '1px solid var(--line)',
-                    transition: 'padding-left .3s var(--ease)',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.paddingLeft = '12px')}
-                  onMouseLeave={(e) => (e.currentTarget.style.paddingLeft = '0')}
-                >
-                  <div style={{
-                    display: 'flex', alignItems: 'center', gap: '12px',
-                    marginBottom: '8px',
-                  }}>
-                    <span style={{
-                      fontFamily: 'var(--serif)', fontSize: '24px', fontWeight: 600,
-                      color: 'var(--ink-muted)', opacity: .4,
-                      fontVariantNumeric: 'tabular-nums',
-                    }}>
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="tag">{post.category}</span>
-                    <span style={{ fontSize: '12px', color: 'var(--ink-muted)' }}>{post.date}</span>
-                  </div>
-                  <h3 style={{
-                    fontFamily: 'var(--serif)', fontSize: '20px', fontWeight: 600,
-                    color: 'var(--ink)', marginBottom: '6px',
-                    transition: 'color .25s',
-                  }}>
-                    {post.title}
-                  </h3>
-                  <p style={{ fontSize: '14px', color: 'var(--ink-muted)', lineHeight: 1.6 }}>
-                    {post.excerpt}
-                  </p>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ===== 底部引言 ===== */}
-      <section style={{ padding: '100px 0', borderTop: '1px solid var(--line)' }}>
-        <div className="container-custom" style={{ textAlign: 'center' }}>
-          <p style={{ color: 'var(--ink-muted)', fontSize: '24px', marginBottom: '12px' }}>「</p>
-          <p style={{
-            fontFamily: 'var(--serif)', fontWeight: 300,
-            fontSize: 'clamp(20px, 3vw, 28px)', lineHeight: 1.7,
-            color: 'var(--ink-soft)', maxWidth: '18em', margin: '0 auto 12px',
-          }}>
-            世界是一个巨大的文本，
-            <br />
-            而我试图读懂它。
-          </p>
-          <p style={{ color: 'var(--ink-muted)', fontSize: '24px', marginBottom: '40px' }}>」</p>
-          <Link to="/contact" className="btn btn--ghost">
-            <MessageCircle className="w-4 h-4" />
-            和我聊聊
-            <span className="arr">→</span>
+            全部 →
           </Link>
-        </div>
-      </section>
-    </div>
+        </motion.div>
+
+        {posts.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: 'var(--sp-8) 0', color: 'var(--ink-muted)' }}>
+            <BookOpen size={24} style={{ opacity: 0.2, margin: '0 auto 12px' }} />
+            <p style={{ fontSize: '14px' }}>还没有文章</p>
+          </div>
+        ) : (
+          <div>
+            {posts.slice(0, 3).map((post, i) => (
+              <motion.div
+                key={post.slug}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.4, delay: i * 0.08, ease: [0.22, 0.61, 0.36, 1] }}
+              >
+                <Link to="/blog" className="post-row">
+                  <div className="post-row__meta" style={{ marginBottom: '6px' }}>
+                    <span className="post-row__idx">{String(i + 1).padStart(2, '0')}</span>
+                    <span className="tag">{post.category}</span>
+                    <span>{post.date}</span>
+                  </div>
+                  <div className="post-row__title">{post.title}</div>
+                  <p style={{ fontSize: '14px', color: 'var(--ink-muted)', marginTop: '4px' }}>{post.excerpt}</p>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function Quote() {
+  return (
+    <section style={{ padding: 'var(--sp-10) 0', borderTop: '1px solid var(--line)' }}>
+      <motion.div
+        className="wrap"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: '-80px' }}
+        transition={{ duration: 0.8, ease: [0.22, 0.61, 0.36, 1] }}
+        style={{ textAlign: 'center' }}
+      >
+        <p style={{ color: 'var(--ink-muted)', fontSize: '20px', marginBottom: '12px' }}>「</p>
+        <p style={{
+          fontFamily: 'var(--serif)', fontWeight: 300,
+          fontSize: 'clamp(18px, 2.5vw, 26px)', lineHeight: 1.8,
+          color: 'var(--ink-soft)', maxWidth: '16em', margin: '0 auto 12px',
+        }}>
+          世界是一个巨大的文本，
+          <br />
+          而我试图读懂它。
+        </p>
+        <p style={{ color: 'var(--ink-muted)', fontSize: '20px', marginBottom: '36px' }}>」</p>
+        <Link to="/contact" className="btn">
+          <MessageCircle size={15} />
+          <span>和我聊聊</span>
+          <span className="arr">→</span>
+        </Link>
+      </motion.div>
+    </section>
   )
 }
