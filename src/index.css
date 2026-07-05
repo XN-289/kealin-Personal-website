@@ -5,56 +5,46 @@
    ═══════════════════════════════════════ */
 
 :root {
-  /* ── 色彩 ── */
-  --paper:       #1a1a2e;
-  --paper-alt:   #1f2240;
-  --ink:         #e8e4e0;
-  --ink-soft:    #a8a29e;
-  --ink-muted:   #6b7280;
-  --accent:      #d4a574;
-  --accent-dim:  rgba(212, 165, 116, 0.08);
-  --line:        rgba(212, 165, 116, 0.12);
+  /* 色彩 */
+  --paper: #1a1a2e;
+  --ink: #e8e4e0;
+  --ink-soft: #a8a29e;
+  --ink-muted: #6b7280;
+  --accent: #d4a574;
+  --accent-dim: rgba(212, 165, 116, 0.06);
+  --line: rgba(212, 165, 116, 0.12);
 
-  /* ── 字体 ── */
-  --serif:  'Noto Serif SC', Georgia, serif;
-  --sans:   'Inter', system-ui, sans-serif;
-  --mono:   'SF Mono', 'Menlo', monospace;
+  /* 字体 */
+  --serif: 'Noto Serif SC', Georgia, serif;
+  --sans: 'Inter', 'Noto Sans SC', system-ui, sans-serif;
+  --mono: 'SF Mono', 'Menlo', monospace;
 
-  /* ── 字号 scale ── */
-  --text-xs:    11px;
-  --text-sm:    13px;
-  --text-base:  15px;
-  --text-lg:    18px;
-  --text-xl:    22px;
-  --text-2xl:   28px;
-  --text-3xl:   36px;
-  --text-4xl:   48px;
-  --text-hero:  clamp(56px, 11vw, 120px);
+  /* 字号 */
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-3xl: 36px;
+  --text-4xl: 48px;
+  --text-hero: clamp(80px, 14vw, 180px);
 
-  /* ── 间距 scale (8px 基准) ── */
-  --sp-1:  4px;
-  --sp-2:  8px;
-  --sp-3:  12px;
-  --sp-4:  16px;
-  --sp-5:  24px;
-  --sp-6:  32px;
-  --sp-7:  48px;
-  --sp-8:  64px;
-  --sp-9:  96px;
-  --sp-10: 128px;
+  /* 间距 */
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+  --sp-9: 96px; --sp-10: 128px;
 
-  /* ── 布局 ── */
-  --nav-h:  64px;
-  --max-w:  680px;
-  --pad:    clamp(20px, 5vw, 48px);
-  --rail:   32px;
+  /* 布局 */
+  --nav-h: 68px;
+  --max-w: 720px;
+  --pad: clamp(24px, 5vw, 64px);
+  --rail: 36px;
 
-  /* ── 动画 ── */
-  --ease:        cubic-bezier(0.22, 0.61, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --dur-fast:    0.15s;
-  --dur:         0.35s;
-  --dur-slow:    0.6s;
+  /* 动画 */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur: 0.35s;
+  --dur-fast: 0.15s;
 }
 
 /* ═══════════ 基础 ═══════════ */
@@ -69,9 +59,16 @@ body {
   line-height: 1.75;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  /* 细微点阵纹理 */
   background-image: radial-gradient(rgba(212, 165, 116, 0.012) 1px, transparent 1px);
   background-size: 4px 4px;
+}
+
+/* 噪点纹理 */
+body::before {
+  content: "";
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: 0.03; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 ::selection { background: rgba(212, 165, 116, 0.25); }
@@ -82,7 +79,7 @@ body {
 a { color: inherit; text-decoration: none; }
 img { display: block; max-width: 100%; }
 
-/* ═══════════ 左侧脊柱线 ═══════════ */
+/* ═══════════ 脊柱线 ═══════════ */
 .rail {
   position: fixed; top: 0; bottom: 0; left: var(--rail);
   z-index: 2; pointer-events: none;
@@ -96,7 +93,7 @@ img { display: block; max-width: 100%; }
 .rail i:nth-child(2) { left: 6px; }
 .rail i:nth-child(3) { left: 12px; }
 
-/* ═══════════ 角落准星 ═══════════ */
+/* ═══════════ 准星 ═══════════ */
 .cross {
   position: fixed; z-index: 2;
   width: 12px; height: 12px;
@@ -106,7 +103,7 @@ img { display: block; max-width: 100%; }
   content: ""; position: absolute; background: var(--accent);
 }
 .cross::before { left: 5px; top: 0; width: 1px; height: 12px; }
-.cross::after  { top: 5px; left: 0; height: 1px; width: 12px; }
+.cross::after { top: 5px; left: 0; height: 1px; width: 12px; }
 .cross--tr { top: calc(var(--nav-h) + 16px); right: 28px; }
 .cross--bl { bottom: 24px; left: 24px; }
 .cross--br { bottom: 24px; right: 28px; }
@@ -127,7 +124,6 @@ img { display: block; max-width: 100%; }
 .nav__brand {
   font-family: var(--serif);
   font-size: var(--text-lg); font-weight: 600;
-  letter-spacing: 0.02em;
   transition: opacity var(--dur-fast);
 }
 .nav__brand:hover { opacity: 0.7; }
@@ -155,7 +151,6 @@ img { display: block; max-width: 100%; }
   border: 1px solid var(--line);
   background: transparent; color: var(--ink);
   font-family: var(--sans); font-size: var(--text-sm);
-  letter-spacing: 0.02em;
   cursor: pointer;
   transition: all var(--dur) var(--ease);
   position: relative; overflow: hidden;
@@ -178,10 +173,9 @@ img { display: block; max-width: 100%; }
   padding: 0 var(--pad);
 }
 
-/* ═══════════ 分割线 ═══════════ */
+/* ═══════════ 通用 ═══════════ */
 .hr { height: 1px; background: var(--line); }
 
-/* ═══════════ 标签 ═══════════ */
 .tag {
   display: inline-block;
   padding: 2px var(--sp-2);
@@ -191,20 +185,17 @@ img { display: block; max-width: 100%; }
   background: var(--accent-dim);
 }
 
-/* ═══════════ 卡片 ═══════════ */
 .card {
   padding: var(--sp-5);
   border: 1px solid var(--line);
-  background: rgba(31, 34, 64, 0.25);
+  background: rgba(31, 34, 64, 0.2);
   transition: all var(--dur) var(--ease);
 }
 .card:hover {
-  border-color: rgba(212, 165, 116, 0.22);
+  border-color: rgba(212, 165, 116, 0.2);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
-/* ═══════════ 文章行 ═══════════ */
 .post-row {
   display: block;
   padding: var(--sp-5) 0;
@@ -215,7 +206,7 @@ img { display: block; max-width: 100%; }
 .post-row:hover { padding-left: var(--sp-3); }
 .post-row__idx {
   font-family: var(--serif); font-size: var(--text-xl);
-  color: var(--ink-muted); opacity: 0.25;
+  color: var(--ink-muted); opacity: 0.2;
   font-variant-numeric: tabular-nums;
 }
 .post-row__title {
@@ -228,7 +219,6 @@ img { display: block; max-width: 100%; }
   font-size: var(--text-sm); color: var(--ink-muted);
 }
 
-/* ═══════════ 输入框 ═══════════ */
 input, textarea {
   width: 100%;
   padding: var(--sp-3) var(--sp-4);
@@ -242,13 +232,11 @@ input, textarea {
 input:focus, textarea:focus { border-color: rgba(212, 165, 116, 0.3); }
 input::placeholder, textarea::placeholder { color: var(--ink-muted); opacity: 0.4; }
 
-/* ═══════════ 页面标题 ═══════════ */
 .page-title {
   font-family: var(--serif); font-weight: 600;
-  font-size: var(--text-hero); line-height: 0.92;
+  font-size: var(--text-hero); line-height: 0.88;
 }
 
-/* ═══════════ 区块标题 ═══════════ */
 .section-title {
   font-family: var(--serif); font-weight: 600;
   font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl)); line-height: 1.1;
@@ -260,8 +248,13 @@ input::placeholder, textarea::placeholder { color: var(--ink-muted); opacity: 0.
 }
 
 /* ═══════════ 响应式 ═══════════ */
-@media (max-width: 768px) {
-  :root { --rail: 16px; --pad: 16px; }
+@media (max-width: 860px) {
+  :root { --rail: 16px; --pad: 16px; --nav-h: 60px; }
   .rail, .cross { display: none; }
   .nav__links { gap: var(--sp-4); }
+}
+
+@media (max-width: 600px) {
+  .nav__links .nav__sep,
+  .nav__links .nav__github { display: none; }
 }

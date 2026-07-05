@@ -11,6 +11,8 @@ const links = [
   { path: '/contact', label: '联系' },
 ]
 
+const ease = [0.22, 0.61, 0.36, 1] as const
+
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -27,13 +29,11 @@ export default function Navbar() {
 
   return (
     <>
-      {/* 装饰元素 */}
       <div className="rail"><i /><i /><i /></div>
       <div className="cross cross--tr" />
       <div className="cross cross--bl" />
       <div className="cross cross--br" />
 
-      {/* 导航栏 */}
       <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <Link to="/" className="nav__brand">解构世界</Link>
 
@@ -44,7 +44,7 @@ export default function Navbar() {
             </Link>
           ))}
           <span className="nav__sep">·</span>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav__link">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="nav__link nav__github">
             <GithubIcon className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -54,7 +54,6 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* 移动端菜单 */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -69,8 +68,7 @@ export default function Navbar() {
             }}
           >
             {links.map((l, i) => (
-              <motion.div
-                key={l.path}
+              <motion.div key={l.path}
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.05, duration: 0.3, ease }}
@@ -81,9 +79,7 @@ export default function Navbar() {
                   fontSize: 'var(--text-sm)', letterSpacing: '0.04em',
                   borderBottom: '1px solid var(--line)',
                   transition: 'color var(--dur)',
-                }}>
-                  {l.label}
-                </Link>
+                }}>{l.label}</Link>
               </motion.div>
             ))}
           </motion.div>
@@ -92,5 +88,3 @@ export default function Navbar() {
     </>
   )
 }
-
-const ease = [0.22, 0.61, 0.36, 1] as const
