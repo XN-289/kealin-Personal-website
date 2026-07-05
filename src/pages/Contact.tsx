@@ -26,149 +26,98 @@ export default function Contact() {
   }
 
   return (
-    <div className="min-h-screen pt-28 pb-16">
-      <div className="container-custom">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mb-16"
-        >
-          <h1 className="text-3xl md:text-4xl font-light text-white/85 mb-3">
-            <span className="gradient-text font-medium">联系</span>
-          </h1>
-          <p className="text-stone-500">如果你有任何想法，欢迎和我聊聊</p>
+    <div style={{ paddingTop: 'var(--nav-h)', minHeight: '100vh' }}>
+      <div className="container-custom" style={{ padding: '10vh var(--pad-x) 80px calc(var(--rail-x) + 48px)' }}>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ marginBottom: '60px' }}>
+          <div style={{
+            fontFamily: 'var(--serif)', fontWeight: 600,
+            fontSize: 'clamp(48px, 8vw, 96px)', lineHeight: .95,
+            color: 'var(--ink)', marginBottom: '12px',
+          }}>
+            联系
+          </div>
+          <p style={{ fontSize: '14px', color: 'var(--ink-muted)' }}>如果你有任何想法，欢迎和我聊聊</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px' }}>
           {/* 表单 */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            <div className="card">
-              <div className="flex items-center gap-2 mb-6">
-                <MessageCircle className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-stone-400">给我留言</span>
-              </div>
-
-              {sent ? (
-                <div className="text-center py-16">
-                  <CheckCircle className="w-10 h-10 text-emerald-400 mx-auto mb-4" />
-                  <p className="text-white/90 mb-1">消息已发送</p>
-                  <p className="text-sm text-stone-500">谢谢你的留言，我会尽快回复</p>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-xs text-stone-500 mb-2">名字</label>
-                      <input
-                        type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required
-                        placeholder="你的名字"
-                        className="w-full px-4 py-3 rounded-xl bg-[#1a1a2e] border border-white/5 text-white placeholder-stone-600 text-sm focus:outline-none focus:border-amber-500/30 transition-colors"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs text-stone-500 mb-2">邮箱</label>
-                      <input
-                        type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required
-                        placeholder="your@email.com"
-                        className="w-full px-4 py-3 rounded-xl bg-[#1a1a2e] border border-white/5 text-white placeholder-stone-600 text-sm focus:outline-none focus:border-amber-500/30 transition-colors"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs text-stone-500 mb-2">想说的话</label>
-                    <textarea
-                      value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required rows={5}
-                      placeholder="任何想法都可以..."
-                      className="w-full px-4 py-3 rounded-xl bg-[#1a1a2e] border border-white/5 text-white placeholder-stone-600 text-sm focus:outline-none focus:border-amber-500/30 transition-colors resize-none"
-                    />
-                  </div>
-
-                  <button
-                    type="submit" disabled={sending}
-                    className="btn-primary w-full justify-center disabled:opacity-50"
-                  >
-                    {sending ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                        发送中...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-4 h-4" />
-                        发送
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+            <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <MessageCircle className="w-4 h-4" style={{ color: 'var(--accent)' }} />
+              <span style={{ fontSize: '13px', color: 'var(--ink-muted)', letterSpacing: '.06em' }}>给我留言</span>
             </div>
+
+            {sent ? (
+              <div style={{ textAlign: 'center', padding: '60px 0' }}>
+                <CheckCircle className="w-10 h-10 mx-auto mb-4" style={{ color: '#34d399' }} />
+                <p style={{ color: 'var(--ink)', marginBottom: '4px' }}>消息已发送</p>
+                <p style={{ fontSize: '14px', color: 'var(--ink-muted)' }}>谢谢你的留言，我会尽快回复</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--ink-muted)', marginBottom: '8px', letterSpacing: '.08em', textTransform: 'uppercase' }}>名字</label>
+                    <input type="text" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required placeholder="你的名字"
+                      style={{ width: '100%', padding: '12px 16px', background: 'transparent', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '14px', outline: 'none' }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', color: 'var(--ink-muted)', marginBottom: '8px', letterSpacing: '.08em', textTransform: 'uppercase' }}>邮箱</label>
+                    <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required placeholder="your@email.com"
+                      style={{ width: '100%', padding: '12px 16px', background: 'transparent', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '14px', outline: 'none' }} />
+                  </div>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', color: 'var(--ink-muted)', marginBottom: '8px', letterSpacing: '.08em', textTransform: 'uppercase' }}>想说的话</label>
+                  <textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} required rows={5} placeholder="任何想法都可以..."
+                    style={{ width: '100%', padding: '12px 16px', background: 'transparent', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '14px', outline: 'none', resize: 'none', fontFamily: 'inherit' }} />
+                </div>
+                <button type="submit" disabled={sending} className="btn btn--ghost" style={{ justifyContent: 'center', opacity: sending ? .5 : 1 }}>
+                  {sending ? <><div style={{ width: 16, height: 16, border: '2px solid var(--line)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }} /> 发送中...</> : <><Send className="w-4 h-4" /> 发送 <span className="arr">→</span></>}
+                </button>
+              </form>
+            )}
           </motion.div>
 
           {/* 联系方式 */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="space-y-6"
-          >
-            <div className="card">
-              <span className="text-xs text-stone-500 mb-4 block">其他联系方式</span>
-              <div className="space-y-3">
-                {channels.map((ch) => {
-                  const Icon = ch.icon
-                  return (
-                    <a
-                      key={ch.label}
-                      href={ch.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-4 p-3 rounded-xl hover:bg-amber-500/5 transition-colors group"
-                    >
-                      <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/15 flex items-center justify-center group-hover:border-amber-500/30 transition-colors">
-                        <Icon className="w-4 h-4 text-amber-400" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-stone-500">{ch.label}</div>
-                        <div className="text-sm text-stone-300">{ch.value}</div>
-                      </div>
-                    </a>
-                  )
-                })}
-              </div>
-            </div>
-
-            <div className="card">
-              <div className="space-y-3 text-sm text-stone-400">
-                <div className="flex items-center gap-3">
-                  <MapPin className="w-4 h-4 text-amber-500/60" />
-                  <span>中国</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Clock className="w-4 h-4 text-amber-500/60" />
-                  <span>通常 24 小时内回复</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="card">
-              <span className="text-xs text-stone-500 mb-3 block">欢迎聊的话题</span>
-              <div className="space-y-2 text-sm text-stone-400">
-                {['写作与创作', 'AI 与技术', '读书与思考', '合作与交流'].map((item) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-amber-400" />
-                    {item}
+          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ fontSize: '11px', color: 'var(--ink-muted)', letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: '4px' }}>其他联系方式</div>
+            {channels.map((ch) => {
+              const Icon = ch.icon
+              return (
+                <a key={ch.label} href={ch.href} target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '16px',
+                    padding: '14px 0', borderBottom: '1px solid var(--line)',
+                    transition: 'padding-left .3s var(--ease)',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.paddingLeft = '8px')}
+                  onMouseLeave={(e) => (e.currentTarget.style.paddingLeft = '0')}
+                >
+                  <div style={{ width: 36, height: 36, border: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Icon className="w-4 h-4" style={{ color: 'var(--accent)' }} />
                   </div>
-                ))}
+                  <div>
+                    <div style={{ fontSize: '11px', color: 'var(--ink-muted)', letterSpacing: '.06em', textTransform: 'uppercase' }}>{ch.label}</div>
+                    <div style={{ fontSize: '15px', color: 'var(--ink)' }}>{ch.value}</div>
+                  </div>
+                </a>
+              )
+            })}
+
+            <div style={{ marginTop: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--ink-muted)', marginBottom: '8px' }}>
+                <MapPin className="w-3.5 h-3.5" /> 中国
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--ink-muted)' }}>
+                <Clock className="w-3.5 h-3.5" /> 通常 24 小时内回复
               </div>
             </div>
           </motion.div>
         </div>
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }
