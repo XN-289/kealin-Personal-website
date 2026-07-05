@@ -17,20 +17,23 @@ export default function Navbar() {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const fn = () => setScrolled(window.scrollY > 40)
+    window.addEventListener('scroll', fn, { passive: true })
+    fn()
+    return () => window.removeEventListener('scroll', fn)
   }, [])
 
   useEffect(() => setOpen(false), [pathname])
 
   return (
     <>
+      {/* 装饰元素 */}
       <div className="rail"><i /><i /><i /></div>
       <div className="cross cross--tr" />
       <div className="cross cross--bl" />
       <div className="cross cross--br" />
 
+      {/* 导航栏 */}
       <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
         <Link to="/" className="nav__brand">解构世界</Link>
 
@@ -51,29 +54,37 @@ export default function Navbar() {
         </button>
       </nav>
 
+      {/* 移动端菜单 */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: [0.22, 0.61, 0.36, 1] }}
+            transition={{ duration: 0.2, ease }}
             style={{
               position: 'fixed', top: 'var(--nav-h)', left: 0, right: 0, zIndex: 40,
               background: 'rgba(26, 26, 46, 0.97)', backdropFilter: 'blur(16px)',
               borderBottom: '1px solid var(--line)',
             }}
           >
-            {links.map((l) => (
-              <Link key={l.path} to={l.path}
-                style={{
-                  display: 'block', padding: '14px var(--pad)',
+            {links.map((l, i) => (
+              <motion.div
+                key={l.path}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05, duration: 0.3, ease }}
+              >
+                <Link to={l.path} style={{
+                  display: 'block', padding: 'var(--sp-4) var(--pad)',
                   color: pathname === l.path ? 'var(--ink)' : 'var(--ink-muted)',
-                  fontSize: '13px', letterSpacing: '0.06em',
+                  fontSize: 'var(--text-sm)', letterSpacing: '0.04em',
                   borderBottom: '1px solid var(--line)',
+                  transition: 'color var(--dur)',
                 }}>
-                {l.label}
-              </Link>
+                  {l.label}
+                </Link>
+              </motion.div>
             ))}
           </motion.div>
         )}
@@ -81,3 +92,5 @@ export default function Navbar() {
     </>
   )
 }
+
+const ease = [0.22, 0.61, 0.36, 1] as const

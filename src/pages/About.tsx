@@ -2,7 +2,7 @@ import { MapPin } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const ease = [0.22, 0.61, 0.36, 1] as const
-const fade = (delay = 0) => ({
+const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 14 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-60px' },
@@ -29,42 +29,40 @@ export default function About() {
   return (
     <div style={{ paddingTop: 'var(--nav-h)' }}>
       {/* 标题 */}
-      <section style={{ padding: '10vh var(--pad) 5vh calc(var(--rail) + 40px)' }}>
-        <motion.div {...fade()}>
-          <div style={{
-            fontFamily: 'var(--serif)', fontWeight: 600,
-            fontSize: 'clamp(48px, 9vw, 100px)', lineHeight: 0.95,
-            marginBottom: '12px',
-          }}>关于我</div>
-          <p style={{ fontSize: '13px', color: 'var(--ink-muted)' }}>一个试图理解世界的人</p>
+      <section style={{ padding: '10vh var(--pad) var(--sp-7) calc(var(--rail) + 40px)' }}>
+        <motion.div {...fadeUp()}>
+          <div className="page-title" style={{ marginBottom: 'var(--sp-3)' }}>关于我</div>
+          <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)' }}>一个试图理解世界的人</p>
         </motion.div>
       </section>
 
-      {/* 介绍 */}
+      {/* 自我介绍 */}
       <section style={{ padding: '0 var(--pad) var(--sp-8) calc(var(--rail) + 40px)' }}>
-        <motion.div {...fade(0.1)} style={{
+        <motion.div {...fadeUp(0.1)} style={{
           display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.3fr)',
-          gap: 'clamp(24px, 4vw, 48px)', alignItems: 'start',
+          gap: 'clamp(var(--sp-5), 4vw, var(--sp-7))', alignItems: 'start',
         }}>
+          {/* 头像 */}
           <div style={{
-            width: '100%', maxWidth: '240px', aspectRatio: '1',
+            width: '100%', maxWidth: '220px', aspectRatio: '1',
             border: '1px solid var(--line)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             position: 'relative',
           }}>
-            <span style={{ fontSize: '56px' }}>🧑‍💻</span>
-            <div style={{ position: 'absolute', top: '-5px', left: '-5px', width: 10, height: 10, borderTop: '1px solid var(--accent)', borderLeft: '1px solid var(--accent)', opacity: 0.3 }} />
-            <div style={{ position: 'absolute', bottom: '-5px', right: '-5px', width: 10, height: 10, borderBottom: '1px solid var(--accent)', borderRight: '1px solid var(--accent)', opacity: 0.3 }} />
+            <span style={{ fontSize: '48px' }}>🧑‍💻</span>
+            <div style={{ position: 'absolute', top: '-5px', left: '-5px', width: 10, height: 10, borderTop: '1px solid var(--accent)', borderLeft: '1px solid var(--accent)', opacity: 0.25 }} />
+            <div style={{ position: 'absolute', bottom: '-5px', right: '-5px', width: 10, height: 10, borderBottom: '1px solid var(--accent)', borderRight: '1px solid var(--accent)', opacity: 0.25 }} />
           </div>
 
+          {/* 文字 */}
           <div>
-            <h2 style={{ fontFamily: 'var(--serif)', fontSize: '22px', fontWeight: 600, marginBottom: '4px' }}>你的名字</h2>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'var(--ink-muted)', marginBottom: '24px' }}>
+            <h2 style={{ fontFamily: 'var(--serif)', fontSize: 'var(--text-xl)', fontWeight: 600, marginBottom: 'var(--sp-1)' }}>你的名字</h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--sp-2)', fontSize: 'var(--text-sm)', color: 'var(--ink-muted)', marginBottom: 'var(--sp-5)' }}>
               <MapPin size={14} /> 中国 <span style={{ color: 'var(--line)' }}>·</span> 写作者 / 思考者
             </div>
-            <div style={{ fontSize: '15px', color: 'var(--ink-soft)', lineHeight: 1.85 }}>
-              <p style={{ marginBottom: '14px' }}>我是一个对世界充满好奇的人。喜欢阅读、写作、思考，也喜欢用技术去辅助我的表达。对我来说，技术不是目的，而是理解世界的一种方式。</p>
-              <p style={{ marginBottom: '14px' }}>我相信文字的力量。一篇文章、一个想法，有时候比任何代码都有力量。所以我把更多的时间花在写作和思考上，用人文的视角去观察这个世界。</p>
+            <div style={{ fontSize: 'var(--text-base)', color: 'var(--ink-soft)', lineHeight: 1.85 }}>
+              <p style={{ marginBottom: 'var(--sp-4)' }}>我是一个对世界充满好奇的人。喜欢阅读、写作、思考，也喜欢用技术去辅助我的表达。对我来说，技术不是目的，而是理解世界的一种方式。</p>
+              <p style={{ marginBottom: 'var(--sp-4)' }}>我相信文字的力量。一篇文章、一个想法，有时候比任何代码都有力量。所以我把更多的时间花在写作和思考上，用人文的视角去观察这个世界。</p>
               <p>AI 是我最近发现的好伙伴。它不是替我写作，而是帮我更好地思考。人和机器的协作，或许是一种新的创作方式。</p>
             </div>
           </div>
@@ -72,56 +70,61 @@ export default function About() {
       </section>
 
       {/* 时间线 */}
-      <section style={{ padding: 'var(--sp-8) var(--pad) var(--sp-8) calc(var(--rail) + 40px)', borderTop: '1px solid var(--line)' }}>
-        <motion.div {...fade()}>
-          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 'clamp(24px, 3.5vw, 36px)', marginBottom: '32px' }}>我的轨迹</h2>
-        </motion.div>
+      <Section title="我的轨迹">
         {timeline.map((item, i) => (
-          <motion.div key={item.year} {...fade(i * 0.08)}
-            style={{ display: 'grid', gridTemplateColumns: '56px 1fr', gap: '20px', padding: '16px 0', borderBottom: '1px solid var(--line)' }}>
-            <span style={{ fontFamily: 'var(--serif)', fontSize: '14px', fontWeight: 600, color: 'var(--accent)' }}>{item.year}</span>
+          <motion.div key={item.year} {...fadeUp(i * 0.06)}
+            style={{ display: 'grid', gridTemplateColumns: '52px 1fr', gap: 'var(--sp-5)', padding: 'var(--sp-4) 0', borderBottom: '1px solid var(--line)' }}>
+            <span style={{ fontFamily: 'var(--serif)', fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--accent)' }}>{item.year}</span>
             <div>
-              <h3 style={{ fontFamily: 'var(--serif)', fontSize: '16px', fontWeight: 600, marginBottom: '2px' }}>{item.title}</h3>
-              <p style={{ fontSize: '14px', color: 'var(--ink-muted)' }}>{item.desc}</p>
+              <h3 style={{ fontFamily: 'var(--serif)', fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: '2px' }}>{item.title}</h3>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)' }}>{item.desc}</p>
             </div>
           </motion.div>
         ))}
-      </section>
+      </Section>
 
       {/* 阅读 */}
-      <section style={{ padding: 'var(--sp-8) var(--pad) var(--sp-8) calc(var(--rail) + 40px)', borderTop: '1px solid var(--line)' }}>
-        <motion.div {...fade()}>
-          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 'clamp(24px, 3.5vw, 36px)', marginBottom: '32px' }}>最近在读</h2>
-        </motion.div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+      <Section title="最近在读">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--sp-3)' }}>
           {books.map((book, i) => (
-            <motion.div key={book.title} {...fade(i * 0.06)} className="card" style={{ padding: '18px 20px' }}>
-              <h3 style={{ fontFamily: 'var(--serif)', fontSize: '15px', fontWeight: 600, marginBottom: '2px' }}>{book.title}</h3>
-              <p style={{ fontSize: '12px', color: 'var(--ink-muted)', marginBottom: '6px' }}>{book.author}</p>
-              <p style={{ fontSize: '13px', color: 'var(--ink-soft)' }}>{book.note}</p>
+            <motion.div key={book.title} {...fadeUp(i * 0.06)} className="card" style={{ padding: 'var(--sp-4) var(--sp-5)' }}>
+              <h3 style={{ fontFamily: 'var(--serif)', fontSize: 'var(--text-sm)', fontWeight: 600, marginBottom: '2px' }}>{book.title}</h3>
+              <p style={{ fontSize: 'var(--text-xs)', color: 'var(--ink-muted)', marginBottom: 'var(--sp-1)' }}>{book.author}</p>
+              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-soft)' }}>{book.note}</p>
             </motion.div>
           ))}
         </div>
-      </section>
+      </Section>
 
       {/* 兴趣 */}
-      <section style={{ padding: 'var(--sp-8) var(--pad) var(--sp-9) calc(var(--rail) + 40px)', borderTop: '1px solid var(--line)' }}>
-        <motion.div {...fade()}>
-          <h2 style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 'clamp(24px, 3.5vw, 36px)', marginBottom: '24px' }}>兴趣标签</h2>
-        </motion.div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      <Section title="兴趣标签" last>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--sp-2)' }}>
           {interests.map((item, i) => (
-            <motion.span key={item} {...fade(i * 0.04)}
+            <motion.span key={item} {...fadeUp(i * 0.03)}
               style={{
-                padding: '7px 16px', border: '1px solid var(--line)',
-                fontSize: '13px', color: 'var(--ink-soft)',
-                transition: 'all var(--duration) var(--ease)', cursor: 'default',
+                padding: 'var(--sp-2) var(--sp-4)', border: '1px solid var(--line)',
+                fontSize: 'var(--text-sm)', color: 'var(--ink-soft)',
+                transition: 'all var(--dur) var(--ease)', cursor: 'default',
               }}>
               {item}
             </motion.span>
           ))}
         </div>
-      </section>
+      </Section>
     </div>
+  )
+}
+
+function Section({ title, children, last }: { title: string; children: React.ReactNode; last?: boolean }) {
+  return (
+    <section style={{
+      padding: `var(--sp-8) var(--pad) ${last ? 'var(--sp-9)' : 'var(--sp-8)'} calc(var(--rail) + 40px)`,
+      borderTop: '1px solid var(--line)',
+    }}>
+      <motion.div {...fadeUp()}>
+        <h2 className="section-title" style={{ marginBottom: 'var(--sp-6)' }}>{title}</h2>
+      </motion.div>
+      {children}
+    </section>
   )
 }

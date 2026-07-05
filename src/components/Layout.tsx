@@ -5,16 +5,10 @@ import DigitalWorld from './DigitalWorld'
 
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col relative">
-      {/* 数字世界背景 */}
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
       <DigitalWorld />
-
-      {/* 扫描线效果 */}
-      <div className="scan-line" />
-
-      {/* 主内容 */}
       <Navbar />
-      <main className="flex-1 relative z-10">
+      <main style={{ flex: 1, position: 'relative', zIndex: 1 }}>
         <Outlet />
       </main>
       <Footer />

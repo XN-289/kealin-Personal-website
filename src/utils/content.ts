@@ -21,79 +21,72 @@ export interface Project {
   content: string
 }
 
-// 从 markdown 文件加载博客文章
 const blogModules = import.meta.glob('/content/blog/*.md', { query: '?raw', import: 'default' })
 const projectModules = import.meta.glob('/content/projects/*.md', { query: '?raw', import: 'default' })
 
-function parseFrontmatter(raw: string) {
-  const match = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
-  if (!match) return { data: {}, content: raw }
+function parse(raw: string) {
+  const m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/)
+  if (!m) return { data: {} as Record<string, string | string[]>, content: raw }
 
-  const frontmatter = match[1]
-  const content = match[2]
   const data: Record<string, string | string[]> = {}
-
-  frontmatter.split('\n').forEach((line) => {
-    const colonIndex = line.indexOf(':')
-    if (colonIndex === -1) return
-    const key = line.slice(0, colonIndex).trim()
-    let value: string | string[] = line.slice(colonIndex + 1).trim()
-
-    // 处理数组 [tag1, tag2]
-    if (typeof value === 'string' && value.startsWith('[') && value.endsWith(']')) {
-      value = value.slice(1, -1).split(',').map((s) => s.trim())
+  m[1].split('\n').forEach((line) => {
+    const i = line.indexOf(':')
+    if (i === -1) return
+    const k = line.slice(0, i).trim()
+    let v: string | string[] = line.slice(i + 1).trim()
+    if (typeof v === 'string' && v.startsWith('[') && v.endsWith(']')) {
+      v = v.slice(1, -1).split(',').map((s) => s.trim())
     }
-
-    data[key] = value
+    data[k] = v
   })
-
-  return { data, content }
+  return { data, content: m[2] }
 }
 
 export async function loadBlogPosts(): Promise<BlogPost[]> {
   const posts: BlogPost[] = []
-
   for (const [path, loader] of Object.entries(blogModules)) {
-    const raw = (await loader()) as string
-    const { data, content } = parseFrontmatter(raw)
-    const slug = path.split('/').pop()?.replace('.md', '') || ''
-
-    posts.push({
-      slug,
-      title: (data.title as string) || '无标题',
-      date: (data.date as string) || '',
-      category: (data.category as string) || '未分类',
-      tags: (data.tags as string[]) || [],
-      excerpt: (data.excerpt as string) || '',
-      content,
-    })
+    try {
+      const raw = (await loader()) as string
+      const { data, content } = parse(raw)
+      const slug = path.split('/').pop()?.replace('.md', '') || ''
+      posts.push({
+        slug,
+        title: (data.title as string) || '无标题',
+        date: (data.date as string) || '',
+        category: (data.category as string) || '未分类',
+        tags: Array.isArray(data.tags) ? data.tags : [],
+        excerpt: (data.excerpt as string) || '',
+        content,
+      })
+    } catch (e) {
+      console.warn(`Failed to load ${path}:`, e)
+    }
   }
-
-  // 按日期倒序
   return posts.sort((a, b) => b.date.localeCompare(a.date))
 }
 
 export async function loadProjects(): Promise<Project[]> {
   const projects: Project[] = []
-
   for (const [path, loader] of Object.entries(projectModules)) {
-    const raw = (await loader()) as string
-    const { data, content } = parseFrontmatter(raw)
-    const slug = path.split('/').pop()?.replace('.md', '') || ''
-
-    projects.push({
-      slug,
-      title: (data.title as string) || '无标题',
-      date: (data.date as string) || '',
-      category: (data.category as string) || '未分类',
-      tech: (data.tech as string[]) || [],
-      github: data.github as string | undefined,
-      live: data.live as string | undefined,
-      stars: data.stars ? Number(data.stars) : undefined,
-      desc: (data.desc as string) || '',
-      content,
-    })
+    try {
+      const raw = (await loader()) as string
+      const { data, content } = parse(raw)
+      const slug = path.split('/').pop()?.replace('.md', '') || ''
+      projects.push({
+        slug,
+        title: (data.title as string) || '无标题',
+        date: (data.date as string) || '',
+        category: (data.category as string) || '未分类',
+        tech: Array.isArray(data.tech) ? data.tech : [],
+        github: data.github as string | undefined,
+        live: data.live as string | undefined,
+        stars: data.stars ? Number(data.stars) : undefined,
+        desc: (data.desc as string) || '',
+        content,
+      })
+    } catch (e) {
+      console.warn(`Failed to load ${path}:`, e)
+    }
   }
-
   return projects.sort((a, b) => b.date.localeCompare(a.date))
 }
