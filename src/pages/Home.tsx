@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { loadBlogPosts, type BlogPost } from '../utils/content'
 
 const ease = [0.22, 0.61, 0.36, 1] as const
+
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
@@ -22,18 +23,9 @@ export default function Home() {
   return (
     <div>
       {/* ═══ HERO ═══ */}
-      <section style={{
-        minHeight: '100vh',
-        display: 'grid', gridTemplateColumns: 'minmax(0, 42%) minmax(0, 58%)',
-        padding: '0 var(--pad) 0 calc(var(--rail) + 40px)',
-        alignItems: 'stretch', overflow: 'hidden',
-      }}>
+      <section className="hero-section">
         {/* 左栏 */}
-        <motion.div style={{
-          y: heroY, opacity: heroOp,
-          display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          padding: 'calc(var(--nav-h) + 6vh) 0 8vh',
-        }}>
+        <motion.div className="hero-left" style={{ y: heroY, opacity: heroOp }}>
           <motion.div {...fadeUp(0.15)}>
             <div className="page-title">解构</div>
             <div className="page-title" style={{
@@ -42,23 +34,15 @@ export default function Home() {
             }}>世界</div>
           </motion.div>
 
-          <motion.div {...fadeUp(0.35)} style={{ marginTop: 'clamp(20px, 4vh, 44px)', marginLeft: 'clamp(8px, 1.2vw, 20px)' }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '10px',
-              fontSize: 'clamp(14px, 1.1vw, 18px)', color: 'var(--accent)',
-              letterSpacing: '0.04em', marginBottom: '18px',
-            }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }} />
+          <motion.div {...fadeUp(0.35)} className="hero-content">
+            <div className="hero-kicker">
+              <span className="hero-dot" />
               一个年轻人的数字花园
             </div>
-            <p style={{
-              fontFamily: 'var(--serif)', fontWeight: 300,
-              fontSize: 'clamp(17px, 1.6vw, 24px)', lineHeight: 1.75,
-              color: 'var(--ink-soft)', maxWidth: '22em', marginBottom: '28px',
-            }}>
+            <p className="hero-slogan">
               用文字记录思考，用技术辅助表达，<br />在这个空间里种下对世界的观察。
             </p>
-            <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+            <div className="hero-cta">
               <Link to="/blog" className="btn"><BookOpen size={15} /><span>查看内容</span><span className="arr">→</span></Link>
               <Link to="/contact" className="btn"><MessageCircle size={15} /><span>联系我</span><span className="arr">→</span></Link>
             </div>
@@ -66,44 +50,41 @@ export default function Home() {
         </motion.div>
 
         {/* 右栏：蓝图档案 */}
-        <motion.div {...fadeUp(0.45)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 'var(--nav-h)' }}>
+        <motion.div {...fadeUp(0.45)} className="hero-right">
           <BlueprintCard />
         </motion.div>
       </section>
 
       {/* ═══ 写·思·创 ═══ */}
-      <section style={{ padding: 'var(--sp-9) 0', borderTop: '1px solid var(--line)' }}>
+      <section className="section-block">
         <div className="wrap">
-          <motion.div {...fadeUp()} style={{ marginBottom: 'var(--sp-7)' }}>
-            <h2 className="section-title" style={{ marginBottom: 'var(--sp-1)' }}>我在做什么</h2>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)' }}>用不同的方式理解这个世界</p>
+          <motion.div {...fadeUp()} className="section-header">
+            <h2 className="section-title">我在做什么</h2>
+            <p className="section-sub">用不同的方式理解这个世界</p>
           </motion.div>
 
           {/* 流程图 */}
-          <motion.div {...fadeUp(0.1)} style={{
-            display: 'grid', gridTemplateColumns: 'auto minmax(36px, 1fr) auto minmax(36px, 1fr) auto',
-            alignItems: 'center', marginBottom: 'var(--sp-7)', maxWidth: '440px',
-          }}>
+          <motion.div {...fadeUp(0.1)} className="flow-diagram">
             <FlowNode zh="写" en="WRITE" />
-            <span style={{ height: 1, background: 'var(--accent)', opacity: 0.35 }} />
+            <span className="flow-line" />
             <FlowNode zh="思" en="THINK" />
-            <span style={{ height: 1, background: 'var(--accent)', opacity: 0.35 }} />
+            <span className="flow-line" />
             <FlowNode zh="创" en="BUILD" />
           </motion.div>
 
           {/* 卡片 */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--sp-4)' }}>
+          <div className="cards-grid">
             {[
               { icon: Pen, title: '写作', desc: '把想法变成文字，在文字中寻找意义。' },
               { icon: Sparkles, title: 'AI 协作', desc: '把 AI 当作思考的伙伴，用技术辅助表达。' },
               { icon: Eye, title: '阅读与观察', desc: '读书、看世界、和人聊天。所有输入最终变成输出。' },
             ].map((item, i) => (
               <motion.div key={item.title} {...fadeUp(0.15 + i * 0.08)} className="card">
-                <div style={{ width: 30, height: 30, border: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 'var(--sp-4)' }}>
+                <div className="card-icon">
                   <item.icon size={14} style={{ color: 'var(--accent)' }} />
                 </div>
-                <h3 style={{ fontFamily: 'var(--serif)', fontSize: 'var(--text-base)', fontWeight: 600, marginBottom: 'var(--sp-1)' }}>{item.title}</h3>
-                <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)', lineHeight: 1.7 }}>{item.desc}</p>
+                <h3 className="card-title">{item.title}</h3>
+                <p className="card-desc">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -111,33 +92,33 @@ export default function Home() {
       </section>
 
       {/* ═══ 文章 ═══ */}
-      <section style={{ padding: 'var(--sp-9) 0', borderTop: '1px solid var(--line)' }}>
+      <section className="section-block">
         <div className="wrap">
-          <motion.div {...fadeUp()} style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 'var(--sp-6)' }}>
+          <motion.div {...fadeUp()} className="section-header-between">
             <div>
-              <h2 className="section-title" style={{ marginBottom: 'var(--sp-1)' }}>最新文章</h2>
-              <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)' }}>最近写的一些东西</p>
+              <h2 className="section-title">最新文章</h2>
+              <p className="section-sub">最近写的一些东西</p>
             </div>
-            <Link to="/blog" style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)', borderBottom: '1px solid var(--line)', paddingBottom: '2px' }}>全部 →</Link>
+            <Link to="/blog" className="section-link">全部 →</Link>
           </motion.div>
 
           {posts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: 'var(--sp-8) 0', color: 'var(--ink-muted)' }}>
+            <div className="empty-state">
               <BookOpen size={24} style={{ opacity: 0.15, margin: '0 auto var(--sp-3)' }} />
-              <p style={{ fontSize: 'var(--text-sm)' }}>还没有文章</p>
+              <p>还没有文章</p>
             </div>
           ) : (
             <div>
               {posts.slice(0, 3).map((post, i) => (
                 <motion.div key={post.slug} {...fadeUp(0.1 + i * 0.06)}>
                   <Link to="/blog" className="post-row">
-                    <div className="post-row__meta" style={{ marginBottom: 'var(--sp-1)' }}>
+                    <div className="post-row__meta">
                       <span className="post-row__idx">{String(i + 1).padStart(2, '0')}</span>
                       <span className="tag">{post.category}</span>
                       <span>{post.date}</span>
                     </div>
                     <div className="post-row__title">{post.title}</div>
-                    <p style={{ fontSize: 'var(--text-sm)', color: 'var(--ink-muted)', marginTop: 'var(--sp-1)' }}>{post.excerpt}</p>
+                    <p className="post-row__excerpt">{post.excerpt}</p>
                   </Link>
                 </motion.div>
               ))}
@@ -150,13 +131,13 @@ export default function Home() {
       <Marquee />
 
       {/* ═══ 引言 ═══ */}
-      <section style={{ padding: 'var(--sp-10) 0', borderTop: '1px solid var(--line)' }}>
-        <motion.div {...fadeUp()} className="wrap" style={{ textAlign: 'center' }}>
-          <p style={{ color: 'var(--ink-muted)', fontSize: 'var(--text-xl)', marginBottom: 'var(--sp-3)' }}>「</p>
-          <p style={{ fontFamily: 'var(--serif)', fontWeight: 300, fontSize: 'clamp(var(--text-lg), 2.5vw, var(--text-2xl))', lineHeight: 1.85, color: 'var(--ink-soft)', maxWidth: '16em', margin: '0 auto var(--sp-3)' }}>
+      <section className="section-block quote-section">
+        <motion.div {...fadeUp()} className="wrap quote-wrap">
+          <p className="quote-mark">「</p>
+          <p className="quote-text">
             世界是一个巨大的文本，<br />而我试图读懂它。
           </p>
-          <p style={{ color: 'var(--ink-muted)', fontSize: 'var(--text-xl)', marginBottom: 'var(--sp-7)' }}>」</p>
+          <p className="quote-mark">」</p>
           <Link to="/contact" className="btn"><MessageCircle size={15} /><span>和我聊聊</span><span className="arr">→</span></Link>
         </motion.div>
       </section>
@@ -174,81 +155,65 @@ function BlueprintCard() {
     { top: '28%', left: '22%' }, { top: '65%', left: '28%' },
     { top: '32%', left: '65%' }, { top: '58%', left: '60%' },
   ]
-  const annoStyle = { fontFamily: 'var(--mono)' as const, fontSize: 7, color: 'var(--ink-muted)', letterSpacing: '0.04em', lineHeight: 1.6 }
 
   return (
-    <div style={{
-      position: 'relative', width: '100%', maxWidth: '420px', aspectRatio: '945/638',
-      border: '1px solid var(--line)',
-      background: `
-        linear-gradient(rgba(212,165,116,0.03) 1px, transparent 1px) 0 0/100% 26px,
-        linear-gradient(90deg, rgba(212,165,116,0.03) 1px, transparent 1px) 0 0/26px 100%
-      `,
-    }}>
+    <div className="blueprint">
       {/* 四角准星 */}
       {corners.map((pos, i) => (
-        <span key={i} style={{ position: 'absolute', ...pos, width: 12, height: 12 }}>
-          <span style={{ position: 'absolute', left: 5, top: 0, width: 1, height: 12, background: 'var(--accent)', opacity: 0.4 }} />
-          <span style={{ position: 'absolute', top: 5, left: 0, height: 1, width: 12, background: 'var(--accent)', opacity: 0.4 }} />
+        <span key={i} className="bp-cross" style={pos}>
+          <span className="bp-cross-v" />
+          <span className="bp-cross-h" />
         </span>
       ))}
 
       {/* 散落十字 */}
       {crosses.map((pos, i) => (
-        <span key={i} style={{ position: 'absolute', ...pos, fontFamily: 'var(--mono)', fontSize: 10, color: 'var(--ink-muted)', opacity: 0.2 }}>+</span>
+        <span key={i} className="bp-plus" style={pos}>+</span>
       ))}
 
       {/* 圆环 */}
-      <span style={{ position: 'absolute', top: '50%', left: '52%', width: '40%', aspectRatio: '1', transform: 'translate(-50%, -50%)', border: '1px solid rgba(212,165,116,0.06)', borderRadius: '50%' }} />
+      <span className="bp-ring" />
 
       {/* 人物 */}
-      <div style={{ position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-48%)', width: '46%' }}>
-        <span style={{ fontSize: '64px', display: 'block', textAlign: 'center', lineHeight: 1 }}>🧑‍💻</span>
+      <div className="bp-figure">
+        <span className="bp-emoji">🧑‍💻</span>
       </div>
 
       {/* 标注 */}
-      <div style={{ position: 'absolute', top: 22, left: 26 }}>
-        <p style={{ ...annoStyle, fontWeight: 600, color: 'var(--ink)', fontSize: 8 }}>
-          <span style={{ width: 4, height: 4, background: 'var(--accent)', display: 'inline-block', marginRight: 5 }} />
-          WRITER / THINKER
-        </p>
-        <span style={{ display: 'block', width: 72, height: 1, background: 'var(--line)', margin: '5px 0' }} />
-        <p style={annoStyle}>WRITE · THINK · BUILD</p>
+      <div className="bp-anno bp-anno--tl">
+        <p className="bp-lead"><span className="bp-sq" />WRITER / THINKER</p>
+        <span className="bp-hr" />
+        <p className="bp-mono">WRITE · THINK · BUILD</p>
       </div>
 
-      <div style={{ position: 'absolute', top: '30%', left: 26 }}>
-        <p style={{ ...annoStyle, fontWeight: 600 }}>SPEC.001</p>
-        <p style={annoStyle}>FOCUS&nbsp;&nbsp;: 人文 × 技术</p>
-        <p style={annoStyle}>TOPIC&nbsp;&nbsp;: 解构世界</p>
-        <p style={annoStyle}>FORMAT&nbsp;: 文章 / 思考</p>
-        <p style={annoStyle}>TOOL&nbsp;&nbsp;&nbsp;: AI 协作</p>
+      <div className="bp-anno bp-anno--ml">
+        <p className="bp-mono bp-key">SPEC.001</p>
+        <p className="bp-mono">FOCUS&nbsp;&nbsp;: 人文 × 技术</p>
+        <p className="bp-mono">TOPIC&nbsp;&nbsp;: 解构世界</p>
+        <p className="bp-mono">FORMAT&nbsp;: 文章 / 思考</p>
+        <p className="bp-mono">TOOL&nbsp;&nbsp;&nbsp;: AI 协作</p>
       </div>
 
-      <div style={{ position: 'absolute', bottom: 44, left: 26 }}>
-        <p style={{ ...annoStyle, fontWeight: 600 }}>VER. 1.0.0</p>
-        <p style={annoStyle}>DATE. 2024</p>
+      <div className="bp-anno bp-anno--bl">
+        <p className="bp-mono bp-key">VER. 1.0.0</p>
+        <p className="bp-mono">DATE. 2024</p>
       </div>
 
-      <div style={{ position: 'absolute', top: 22, right: 26, textAlign: 'right' }}>
-        <p style={{ ...annoStyle, fontWeight: 600 }}>ID // 解构世界</p>
+      <div className="bp-anno bp-anno--tr">
+        <p className="bp-mono bp-key">ID // 解构世界</p>
       </div>
 
-      <div style={{ position: 'absolute', top: '30%', right: 26, textAlign: 'right' }}>
-        <p style={annoStyle}>CATEGORY</p>
-        <p style={annoStyle}>人文思考</p>
-        <span style={{ display: 'block', width: 30, height: 8, marginTop: 3, background: 'repeating-linear-gradient(45deg, var(--line) 0 1px, transparent 1px 4px)' }} />
+      <div className="bp-anno bp-anno--mr">
+        <p className="bp-mono">CATEGORY</p>
+        <p className="bp-mono">人文思考</p>
+        <span className="bp-hatch" />
       </div>
 
-      <div style={{ position: 'absolute', bottom: 44, right: 26, textAlign: 'right' }}>
-        <p style={annoStyle}>EST. 2022</p>
+      <div className="bp-anno bp-anno--br">
+        <p className="bp-mono">EST. 2022</p>
       </div>
 
-      <span style={{
-        position: 'absolute', left: '50%', bottom: 10, transform: 'translateX(-50%)',
-        fontFamily: 'var(--mono)', fontSize: 7, letterSpacing: '0.1em', color: 'var(--ink-muted)', whiteSpace: 'nowrap',
-      }}>
-        N 31° 24′ 37″&nbsp;&nbsp;&nbsp;&nbsp;E 121° 35′ 09″
-      </span>
+      <span className="bp-coords">N 31° 24′ 37″&nbsp;&nbsp;&nbsp;&nbsp;E 121° 35′ 09″</span>
     </div>
   )
 }
@@ -256,14 +221,9 @@ function BlueprintCard() {
 /* ── 流程节点 ── */
 function FlowNode({ zh, en }: { zh: string; en: string }) {
   return (
-    <div style={{
-      width: 'clamp(68px, 7.5vw, 96px)', aspectRatio: '1',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
-      border: '1px solid var(--accent)', borderRadius: '50%',
-      transition: 'all var(--dur) var(--ease)', cursor: 'default',
-    }}>
-      <span style={{ fontFamily: 'var(--serif)', fontWeight: 600, fontSize: 'clamp(20px, 2vw, 28px)', lineHeight: 1 }}>{zh}</span>
-      <span style={{ fontFamily: 'var(--mono)', fontSize: 8, letterSpacing: '0.08em', color: 'var(--ink-muted)' }}>{en}</span>
+    <div className="flow-node">
+      <span className="flow-zh">{zh}</span>
+      <span className="flow-en">{en}</span>
     </div>
   )
 }
@@ -272,13 +232,13 @@ function FlowNode({ zh, en }: { zh: string; en: string }) {
 function Marquee() {
   const words = '写作 · 思考 · AI · 阅读 · 解构 · 人文 · 技术 · 表达 · 观察 · 构建 · '
   return (
-    <section style={{ overflow: 'hidden', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', padding: '13px 0' }}>
+    <section className="marquee-section">
       <motion.div
         animate={{ x: [0, '-50%'] }}
         transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
-        style={{ display: 'flex', width: 'max-content' }}
+        className="marquee-track"
       >
-        <span style={{ fontFamily: 'var(--serif)', fontSize: 15, color: 'var(--ink-muted)', letterSpacing: '0.06em', whiteSpace: 'nowrap', flex: 'none' }}>{words}{words}</span>
+        <span className="marquee-text">{words}{words}</span>
       </motion.div>
     </section>
   )
